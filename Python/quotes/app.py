@@ -18,7 +18,7 @@ port = int(os.environ['PORT'])
 
 address = "localhost:"
 
-generalService = GeneralService(address + port)
+generalService = GeneralService("localhost:" + generatePortMulti(gRPCKey, port, 50051))
 
 linearService = LinearService("localhost:" + generatePortMulti(gRPCKey, port, 50051))
 
