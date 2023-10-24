@@ -144,7 +144,7 @@ class LinearService(object):
             response = self.__stub.TweedieRegressorEvent(request_message)
             return asdict(response)
         
-    def sgdClassifierReponse(
+    def sgdClassifierResponse(
             self, 
             data
         )->dict:

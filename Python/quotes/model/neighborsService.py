@@ -53,7 +53,7 @@ class NeighborsService(object):
             response = self.__stub.KDTreeEvent(request_message)
             return asdict(response)
         
-    def nearestCentroidReponse(
+    def nearestCentroidResponse(
             self, 
             data
         )->dict:
