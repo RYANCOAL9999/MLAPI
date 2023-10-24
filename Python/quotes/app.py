@@ -1,65 +1,281 @@
 import os
-import boto3
-import grpc
-import redis
+import logging
+from typing import Any
 
-from flask import Flask, jsonify, make_response, request
+from Python.quotes.lib.helper import generatePortMulti
+from Python.quotes.model.svmService import SVMService
+from Python.quotes.model.linearService import LinearService
+from Python.quotes.model.generalService import GeneralService
+from Python.quotes.model.neighborsService import NeighborsService
+from Python.quotes.model.polynomialService import PolynomialService
+from flask import Flask, jsonify, make_response, request, Response, status
 
-BUCKET_NAME = 'serverless-machine-learning'
+# https://flask-api.github.io/flask-api/api-guide/status-codes/
 
-dynamodb_client = boto3.client('dynamodb')
+gRPCKey = str(os.environ['GRPCKEY'])
 
-grpc_host = "localhost:50051"
+port = int(os.environ['PORT'])
 
-channel = grpc.insecure_channel(grpc_host)
+address = "localhost:"
 
-S3 = boto3.client('s3', region_name='eu-central-1')
+generalService = GeneralService(address + port)
 
-r = redis.Redis(host='localhost', port=6379, db=0)
+linearService = LinearService("localhost:" + generatePortMulti(gRPCKey, port, 50051))
 
-# response = S3.get_object(Bucket=BUCKET_NAME, Key=key)
+neighborsService = NeighborsService("localhost:" + generatePortMulti(gRPCKey, port, 50052) )
+
+polynomialService = PolynomialService("localhost:" + generatePortMulti(gRPCKey, port, 50053) )
+
+svmService = SVMService("localhost:" + generatePortMulti(gRPCKey, port, 50054) )
 
 app = Flask(__name__)
 
-if os.environ.get('IS_OFFLINE'):
-    dynamodb_client = boto3.client(
-        'dynamodb', 
-        region_name='localhost', 
-        endpoint_url='http://localhost:8000'
+@app.route("/", methods=["GET"])
+def handle_root_request()->Response: 
+    return make_response(
+        jsonify(
+            message = 'Do not wanna attack my server!'
+        ),
+        status.HTTP_204_NO_CONTENT
     )
 
-USERS_TABLE = os.environ['USERS_TABLE']
+@app.route("/api/head", methods=["GET"])
+def head()->Response:  
+    return make_response(
+        jsonify(
+            generalService.headerResponse(
 
-@app.route("/")
-def hello_from_root():
-    return jsonify(message='Do not wanna attack my server !')
-
-@app.route('/users/<string:user_id>')
-def get_user(user_id):
-    result = dynamodb_client.get_item(
-        TableName=USERS_TABLE, Key={'userId': {'S': user_id}}
-    )
-    item = result.get('Item')
-    if not item:
-        return jsonify({'error': 'Could not find user with provided "userId"'}), 404
-
-    return jsonify(
-        {'userId': item.get('userId').get('S'), 'name': item.get('name').get('S')}
+            )
+        ),
+        status.HTTP_200_OK
     )
 
-@app.route('/users', methods=['POST'])
-def create_user():
-    user_id = request.json.get('userId')
-    name = request.json.get('name')
-    if not user_id or not name:
-        return jsonify({'error': 'Please provide both "userId" and "name"'}), 400
+@app.route("/api/info", methods=["GET"])
+def info()->Response: 
+    return make_response(
+        jsonify(
+            generalService.infoResponse(
 
-    dynamodb_client.put_item(
-        TableName=USERS_TABLE, Item={'userId': {'S': user_id}, 'name': {'S': name}}
+            )
+        ),
+        status.HTTP_200_OK
     )
 
-    return jsonify({'userId': user_id, 'name': name})
+@app.route("/api/describle", methods=["GET"])
+def describle()->Response: 
+    return make_response(
+        jsonify(
+            generalService.describleResponse(
+
+            )
+        ),
+        status.HTTP_200_OK
+    )
+
+@app.route("/api/linearSVC", methods=["POST"])
+def linearSVC()->Response:
+    return make_response(
+        jsonify(
+            svmService.linearSVCResponse(
+                request.json
+            )
+        ),
+        status.HTTP_200_OK
+    )
+
+@app.route("/api/linearSVR", methods=["POST"])
+def linearSVR()->Response: 
+    return make_response(
+        jsonify(
+            svmService.linearSVRResponse(
+                request.json
+            )
+        ),
+        status.HTTP_200_OK
+    )
+
+@app.route("/api/svc", methods=["POST"])
+def svc()->Response: 
+    return make_response(
+        jsonify(
+            svmService.linearSVCResponse(
+                request.json
+            )
+        ),
+        status.HTTP_200_OK
+    )
+
+@app.route("/api/polynomialFeatures", methods=["POST"])
+def polynomialFeatures()->Response: 
+    return make_response(
+        jsonify(
+            polynomialService.polynomialFeaturesResponse(
+                request.json
+            )
+        ),
+        status.HTTP_200_OK
+    )
+
+@app.route("/api/polynomialFeaturesFitTransform", methods=["POST"])
+def polynomialFeaturesFitTransform()->Response: 
+    return make_response(
+        jsonify(
+            polynomialService.polynomialFeaturesFitTransformResponse(
+                request.json
+            )
+        ),
+        status.HTTP_200_OK
+    )
+
+
+@app.route("/api/nearestNeighbors", methods=["POST"])
+def nearestNeighbors()->Response: 
+    return make_response(
+        jsonify(
+            neighborsService.nearestCentroidReponse(
+                request.json
+            )
+        ),
+        status.HTTP_200_OK
+    )
+
+@app.route("/api/kdTree", methods=["POST"])
+def kdTree()->Response: 
+    return make_response(
+        jsonify(
+            neighborsService.kdTreeResponse(request.json)
+        ),
+        status.HTTP_200_OK
+    )
+
+@app.route("/api/nearestCentroid", methods=["POST"])
+def nearestCentroid()->Response: 
+    return make_response(
+        jsonify(
+            neighborsService.nearestCentroidReponse(
+                request.json
+            )
+        ),
+        status.HTTP_200_OK
+    )
+
+@app.route("/api/linearRegression", methods=["POST"])
+def linearRegression()->Response: 
+    return make_response(
+        jsonify(
+            linearService.linearRegressionResponse(
+                request.json
+            )
+        ),
+        status.HTTP_200_OK
+    )
+
+@app.route("/api/ridge", methods=["POST"])
+def ridge()->Response: 
+    return make_response(
+        jsonify(
+            linearService.ridgeRespone(
+                request.json
+            )
+        ),
+        status.HTTP_200_OK
+    )
+
+@app.route("/api/ridgeCV", methods=["POST"])
+def ridgeCV()->Response: 
+    return make_response(
+        jsonify(
+            linearService.ridgeCVReponse(
+                request.json
+            )
+        ),
+        status.HTTP_200_OK
+    )
+
+@app.route("/api/lasso", methods=["POST"])
+def lasso()->Response: 
+    return make_response(
+        jsonify(
+            linearService.lassoReponse(
+                request.json
+            )
+        ),
+        status.HTTP_200_OK
+    )
+
+@app.route("/api/lassoLars", methods=["POST"])
+def lassoLars()->Response: 
+    return make_response(
+        jsonify(
+            linearService.lassoLarsReponse(
+                request.json
+            )
+        ),
+        status.HTTP_200_OK
+    )
+
+@app.route("/api/bayesianRidge", methods=["POST"])
+def bayesianRidge()->Response: 
+    return make_response(
+        jsonify(
+            linearService.BayesianRidgeResponse(
+                request.json
+            )
+        ),
+        status.HTTP_200_OK
+    )
+
+@app.route("/api/tweedieRegressor", methods=["POST"])
+def tweedieRegressor()->Response: 
+    return make_response(
+        jsonify(
+            linearService.tweedieRegressorResponse(request.json)
+        ),
+        status.HTTP_200_OK
+    )
+
+@app.route("/api/sgdClassifier", methods=["POST"])
+def sgdClassifier()->Response: 
+    return make_response(
+        jsonify(
+            linearService.sgdClassifierReponse(
+                request.json
+            )
+        ),
+        status.HTTP_200_OK
+    )
+
+@app.route("/api/elasticNet", methods=["POST"])
+def elasticNet()->Response: 
+    return make_response(
+        jsonify(
+            linearService.elasticNetReponse(
+                request.json
+            )
+        ),
+        status.HTTP_200_OK
+    )
 
 @app.errorhandler(404)
-def resource_not_found(e):
-    return make_response(jsonify(error='Not found!'), 404)
+def resource_not_found()->Any: 
+    return make_response(
+        jsonify(
+            error = 'Not found!'
+        ), 
+        status.HTTP_404_NOT_FOUND
+    )
+
+if __name__ == "__main__":
+    logging.basicConfig(
+        filename = None,
+        filemode = "",
+        format = "",
+        datefmt = None,
+        style = "",
+        level = logging.INFO,
+        stream = None,
+        handlers = None,
+        force = None,
+        encoding = None,
+        errors = None
+    )
