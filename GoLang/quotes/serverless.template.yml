@@ -1,0 +1,6 @@
+name: quotes
+org: ryancoal9999
+description: Deploys a GoLang API service, backed by DynamoDB, with traditional Serverless Framework
+keywords: aws, serverless, faas, lambda, GoLang, Go-Gin, Go-Swagger,dynamodb
+repo: https://github.com/serverless/examples/tree/v3/aws-golang-http-get-post
+license: MIT
