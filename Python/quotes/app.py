@@ -102,11 +102,11 @@ def linearSVR()->Response:
 
 @app.route("/api/svc", methods=["POST"])
 def svc()->Response:
-    response = checkAPI(request, svmService.linearSVCResponse)
+    response = checkAPI(request, svmService.svcResponse)
     if response is None:
         response = make_response(
             jsonify(
-                svmService.linearSVCResponse(
+                svmService.svcResponse(
                     request.json
                 )
             ),
@@ -145,11 +145,11 @@ def polynomialFeaturesFitTransform()->Response:
 
 @app.route("/api/nearestNeighbors", methods=["POST"])
 def nearestNeighbors()->Response: 
-    response = checkAPI(request,neighborsService.nearestCentroidResponse)
+    response = checkAPI(request,neighborsService.nearestNeighborsRespone)
     if response is None:
         response = make_response(
             jsonify(
-                neighborsService.nearestCentroidResponse(
+                neighborsService.nearestNeighborsRespone(
                     request.json
                 )
             ),

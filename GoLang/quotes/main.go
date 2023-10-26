@@ -2,32 +2,64 @@ package main
 
 import (
 	"context"
-	"flag"
 	"log"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	ginadapter "github.com/awslabs/aws-lambda-go-api-proxy/gin"
 	"github.com/gin-gonic/gin"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 )
 
 var ginLambda *ginadapter.GinLambda
 
-var (
-	addr_50051 = flag.String("addr", "localhost:50051", "the address to connect to")
-)
-
 func init() {
+
 	log.Printf("Gin cold start")
-	conn, err := grpc.Dial(*addr_50051, grpc.WithTransportCredentials(insecure.NewCredentials()))
-	if err != nil {
-		log.Fatalf("Could not connect to gRPC server: %v", err)
-	}
+
 	r := gin.Default()
-	r.GET("/api/head", func(c *gin.Context) { headEvent(c, conn) })
+
+	r.GET("/api/head", headerResponse)
+
+	r.GET("/api/info", infoResponse)
+
+	r.GET("/api/descible", describleResponse)
+
+	r.POST("/api/linearSVC", linearSVCResponse)
+
+	r.POST("/api/linearSVR", linearSVRResponse)
+
+	r.POST("/api/svc", svcResponse)
+
+	r.POST("/api/polynomialFeatures", polynomialFeaturesResponse)
+
+	r.POST("/api/polynomialFeaturesFitTransform", polynomialFeaturesFitTransformResponse)
+
+	r.POST("/api/nearestNeighbors", nearestNeighborsRespone)
+
+	r.POST("/api/kdTree", kdTreeResponse)
+
+	r.POST("/api/nearestCentroid", nearestCentroidResponse)
+
+	r.POST("/api/linearRegression", linearRegressionResponse)
+
+	r.POST("/api/ridge", ridgeRespone)
+
+	r.POST("/api/ridgeCV", ridgeCVReponse)
+
+	r.POST("/api/lasso", lassoReponse)
+
+	r.POST("/api/lassoLars", lassoLarsReponse)
+
+	r.POST("/api/bayesianRidge", bayesianRidgeResponse)
+
+	r.POST("/api/tweedieRegressor", tweedieRegressorResponse)
+
+	r.POST("/api/sgdClassifier", sgdClassifierResponse)
+
+	r.POST("/api/elasticNet", elasticNetResponse)
+
 	ginLambda = ginadapter.New(r)
+
 }
 
 func Handler(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
