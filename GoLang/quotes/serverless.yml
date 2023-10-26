@@ -1,0 +1,136 @@
+service: quotes
+frameworkVersion: '>=1.28.8'
+provider:
+  name: aws
+  runtime: go1.x
+  region: eu-central-1
+  stage: ${opt:stage}
+functions:
+  headAPI:
+    handler: bin/main
+    events:
+      - http:
+          path: /api/head
+          method: GET
+  infoAPI:
+    handler: bin/main
+    events:
+      - http:
+          path: /api/info
+          method: GET
+  descibleAPI:
+    handler: bin/main
+    events:
+      - http:
+          path: /api/descible
+          method: GET  
+  linearSVCAPI:
+    handler: bin/main
+    events:
+      - http:
+          path: /api/linearSVC
+          method: POST
+  linearSVRAPI:
+    handler: bin/main
+    events:
+      - http:
+          path: /api/linearSVR
+          method: POST
+  svcAPI:
+    handler: bin/main
+    events:
+      - http:
+          path: /api/svc
+          method: POST
+  polynomialFeaturesAPI:
+    handler: bin/main
+    events:
+      - http:
+          path: /api/polynomialFeatures
+          method: POST
+  polynomialFeaturesFitTransformAPI:
+    handler: bin/main
+    events:
+      - http:
+          path: /api/polynomialFeaturesFitTransform
+          method: POST
+  nearestNeighborsAPI:
+    handler: bin/main
+    events:
+      - http:
+          path: /api/nearestNeighbors
+          method: POST
+  kdTreeAPI:
+    handler: bin/main
+    events:
+      - http:
+          path: /api/kdTree
+          method: POST
+  nearestCentroidAPI:
+    handler: bin/main
+    events:
+      - http:
+          path: /api/nearestCentroid
+          method: POST
+  linearRegressionAPI:
+    handler: bin/main
+    events:
+      - http:
+          path: /api/linearRegression
+          method: POST
+  ridgeAPI:
+    handler: bin/main
+    events:
+      - http:
+          path: /api/ridge
+          method: POST
+  ridgeCVAPI:
+    handler: bin/main
+    events:
+      - http:
+          path: /api/ridgeCV
+          method: POST
+  lassoAPI:
+    handler: bin/main
+    events:
+      - http:
+          path: /api/lasso
+          method: POST
+  lassoLarsAPI:
+    handler: bin/main
+    events:
+      - http:
+          path: /api/lassoLars
+          method: POST
+  bayesianRidgeAPI:
+    handler: bin/main
+    events:
+      - http:
+          path: /api/bayesianRidge
+          method: POST
+  tweedieRegressorAPI:
+    handler: bin/main
+    events:
+      - http:
+          path: /api/tweedieRegressor
+          method: POST
+  sgdClassifierAPI:
+    handler: bin/main
+    events:
+      - http:
+          path: /api/sgdClassifier
+          method: POST
+  elasticNetAPI:
+    handler: bin/main
+    events:
+      - http:
+          path: /api/elasticNet
+          method: POST
+                                                                                                                                                         
+package:
+  patterns:
+    - '!*/**'
+    - bin/main
+  
+
+
