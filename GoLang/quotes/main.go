@@ -1,61 +1,39 @@
 package main
 
-import {
+import (
+	"context"
+	"flag"
+	"log"
+
+	"github.com/aws/aws-lambda-go/events"
+	"github.com/aws/aws-lambda-go/lambda"
+	ginadapter "github.com/awslabs/aws-lambda-go-api-proxy/gin"
 	"github.com/gin-gonic/gin"
-	"github.com/go-openapi/loads"
-	"github.com/go-openapi/runtime/middleware"
-	"mlAPI/restapi"
-    "mlAPI/restapi/operations"
-	"github.com/go-openapi/swag"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
+)
+
+var ginLambda *ginadapter.GinLambda
+
+var (
+	addr_50051 = flag.String("addr", "localhost:50051", "the address to connect to")
+)
+
+func init() {
+	log.Printf("Gin cold start")
+	conn, err := grpc.Dial(*addr_50051, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		log.Fatalf("Could not connect to gRPC server: %v", err)
+	}
+	r := gin.Default()
+	r.GET("/api/head", func(c *gin.Context) { headEvent(c, conn) })
+	ginLambda = ginadapter.New(r)
+}
+
+func Handler(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	return ginLambda.ProxyWithContext(ctx, request)
 }
 
 func main() {
-	r := gin.Default()
-
-	doc, _ := loads.Analyzed(restapi.SwaggerJSON, "")
-	api := operations.NewMyServerlessAppAPI(doc)
-
-	// Load Swagger documentation
-	r.Static("/swaggerui/", "./swaggerui/")
-
-	// Serve Swagger UI
-	r.GET("/swagger.json", func(c *gin.Context) {
-		c.JSON(200, doc.Spec())
-	})
-
-	// Set up gRPC client connection
-    conn, err := grpc.Dial("localhost:50051", grpc.WithInsecure())
-    if err != nil {
-        log.Fatalf("Could not connect to gRPC server: %v", err)
-    }
-    defer conn.Close()
-
-    // Create a gRPC client
-    client := your_grpc_package.NewYourGRPCServiceClient(conn)
-
-	r.GET("/", func(c *gin.Context) {
-        c.JSON(204, gin.H{"message": "Do not wanna attack my server!"})
-    })
-
-	r.GET("/head", func(c *gin.Context) {
-        // Use the gRPC client to make requests to your gRPC service
-        response, err := client.YourGRPCMethod(context.Background(), &your_grpc_package.YourRequest{})
-        if err != nil {
-            c.JSON(500, gin.H{"error": err.Error()})
-            return
-        }
-        c.JSON(200, gin.H{"message": response.Message})
-    })
-
-
-
-	r.Use(middleware.Recover())
-    r.Use(middleware.Spec(api.Context, doc))
-
-	// Define your API routes
-    restapi.RegisterHandlers(r, api)
-
-	r.Run()
-
+	lambda.Start(Handler)
 }
