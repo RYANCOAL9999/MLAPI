@@ -31,7 +31,7 @@ func linearSVCResponse(c *gin.Context) {
 	bodyAsByteArray, err := io.ReadAll(c.Request.Body)
 
 	if err != nil {
-		log.Fatalf("could not linear SVC: %v", err)
+		log.Fatalf("could not linear svc: %v", err)
 		c.JSON(400, gin.H{"error": "Bad Request"})
 		return
 	}
@@ -41,7 +41,7 @@ func linearSVCResponse(c *gin.Context) {
 	err = json.Unmarshal(bodyAsByteArray, &data)
 
 	if err != nil {
-		log.Fatalf("could not linear SVC: %v", err)
+		log.Fatalf("could not linear svc: %v", err)
 		c.JSON(404, gin.H{"error": "missing parameter"})
 		return
 	}
@@ -60,12 +60,20 @@ func linearSVCResponse(c *gin.Context) {
 	})
 
 	if err != nil {
-		log.Fatalf("could not linear SVC: %v", err)
-		c.JSON(500, gin.H{"error": "could not linear SVC"})
+		log.Fatalf("could not linear svc: %v", err)
+		c.JSON(500, gin.H{"error": "could not linear svc"})
 		return
 	}
 
-	c.JSON(200, gin.H{"dataFrame": r})
+	responseData, err := json.Marshal(r)
+
+	if err != nil {
+		log.Fatalf("response encoding linear svc: %v", err)
+		c.JSON(505, gin.H{"error": "could not linear svc"})
+		return
+	}
+
+	c.JSON(200, responseData)
 
 }
 
@@ -74,7 +82,7 @@ func linearSVRResponse(c *gin.Context) {
 	bodyAsByteArray, err := io.ReadAll(c.Request.Body)
 
 	if err != nil {
-		log.Fatalf("could not linear SVR: %v", err)
+		log.Fatalf("could not linear svr: %v", err)
 		c.JSON(400, gin.H{"error": "Bad Request"})
 		return
 	}
@@ -84,7 +92,7 @@ func linearSVRResponse(c *gin.Context) {
 	err = json.Unmarshal(bodyAsByteArray, &data)
 
 	if err != nil {
-		log.Fatalf("could not linear SVR: %v", err)
+		log.Fatalf("could not linear svr: %v", err)
 		c.JSON(404, gin.H{"error": "missing parameter"})
 		return
 	}
@@ -103,12 +111,20 @@ func linearSVRResponse(c *gin.Context) {
 	})
 
 	if err != nil {
-		log.Fatalf("could not linear SVR: %v", err)
-		c.JSON(500, gin.H{"error": "could not linear SVR"})
+		log.Fatalf("could not linear svr: %v", err)
+		c.JSON(500, gin.H{"error": "could not linear svr"})
 		return
 	}
 
-	c.JSON(200, gin.H{"dataFrame": r})
+	responseData, err := json.Marshal(r)
+
+	if err != nil {
+		log.Fatalf("response encoding linear svr: %v", err)
+		c.JSON(505, gin.H{"error": "could not linear svr"})
+		return
+	}
+
+	c.JSON(200, responseData)
 
 }
 
@@ -151,6 +167,14 @@ func svcResponse(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, gin.H{"dataFrame": r})
+	responseData, err := json.Marshal(r)
+
+	if err != nil {
+		log.Fatalf("response encoding svc: %v", err)
+		c.JSON(505, gin.H{"error": "could not svc"})
+		return
+	}
+
+	c.JSON(200, responseData)
 
 }

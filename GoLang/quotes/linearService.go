@@ -31,7 +31,7 @@ func linearRegressionResponse(c *gin.Context) {
 	bodyAsByteArray, err := io.ReadAll(c.Request.Body)
 
 	if err != nil {
-		log.Fatalf("could not linear Regression: %v", err)
+		log.Fatalf("could not linear regression: %v", err)
 		c.JSON(400, gin.H{"error": "Bad Request"})
 		return
 	}
@@ -41,7 +41,7 @@ func linearRegressionResponse(c *gin.Context) {
 	err = json.Unmarshal(bodyAsByteArray, &data)
 
 	if err != nil {
-		log.Fatalf("could not linear Regression: %v", err)
+		log.Fatalf("could not linear regression: %v", err)
 		c.JSON(404, gin.H{"error": "missing parameter"})
 		return
 	}
@@ -60,13 +60,20 @@ func linearRegressionResponse(c *gin.Context) {
 	})
 
 	if err != nil {
-		log.Fatalf("could not linear Regression: %v", err)
-		c.JSON(500, gin.H{"error": "could not linear Regression"})
+		log.Fatalf("could not linear regression: %v", err)
+		c.JSON(500, gin.H{"error": "could not linear regression"})
 		return
 	}
 
-	c.JSON(200, gin.H{"dataFrame": r})
+	responseData, err := json.Marshal(r)
 
+	if err != nil {
+		log.Fatalf("response encoding linear regression: %v", err)
+		c.JSON(505, gin.H{"error": "could not linear regression"})
+		return
+	}
+
+	c.JSON(200, responseData)
 }
 
 func ridgeRespone(c *gin.Context) {
@@ -103,12 +110,20 @@ func ridgeRespone(c *gin.Context) {
 	})
 
 	if err != nil {
-		log.Fatalf("could not Ridge: %v", err)
-		c.JSON(500, gin.H{"error": "could not Ridge"})
+		log.Fatalf("could not ridge: %v", err)
+		c.JSON(500, gin.H{"error": "could not ridge"})
 		return
 	}
 
-	c.JSON(200, gin.H{"dataFrame": r})
+	responseData, err := json.Marshal(r)
+
+	if err != nil {
+		log.Fatalf("response encoding ridge: %v", err)
+		c.JSON(505, gin.H{"error": "could not ridge"})
+		return
+	}
+
+	c.JSON(200, responseData)
 
 }
 
@@ -117,7 +132,7 @@ func ridgeCVReponse(c *gin.Context) {
 	bodyAsByteArray, err := io.ReadAll(c.Request.Body)
 
 	if err != nil {
-		log.Fatalf("could not ridge CV: %v", err)
+		log.Fatalf("could not ridge cv: %v", err)
 		c.JSON(400, gin.H{"error": "Bad Request"})
 		return
 	}
@@ -127,7 +142,7 @@ func ridgeCVReponse(c *gin.Context) {
 	err = json.Unmarshal(bodyAsByteArray, &data)
 
 	if err != nil {
-		log.Fatalf("could not ridge CV: %v", err)
+		log.Fatalf("could not ridge cv: %v", err)
 		c.JSON(404, gin.H{"error": "missing parameter"})
 		return
 	}
@@ -138,12 +153,20 @@ func ridgeCVReponse(c *gin.Context) {
 	r, err := linearClient.LinearRidgeCVEvent(ctx, &pb.LinearRidgeCVRequest{})
 
 	if err != nil {
-		log.Fatalf("could not ridge CV: %v", err)
-		c.JSON(500, gin.H{"error": "could not ridge CV"})
+		log.Fatalf("could not ridge cv: %v", err)
+		c.JSON(500, gin.H{"error": "could not ridge cv"})
 		return
 	}
 
-	c.JSON(200, gin.H{"dataFrame": r})
+	responseData, err := json.Marshal(r)
+
+	if err != nil {
+		log.Fatalf("response encoding ridge cv %v", err)
+		c.JSON(505, gin.H{"error": "could not ridge cv"})
+		return
+	}
+
+	c.JSON(200, responseData)
 
 }
 
@@ -187,7 +210,15 @@ func lassoReponse(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, gin.H{"dataFrame": r})
+	responseData, err := json.Marshal(r)
+
+	if err != nil {
+		log.Fatalf("response encoding lasso: %v", err)
+		c.JSON(505, gin.H{"error": "could not lasso"})
+		return
+	}
+
+	c.JSON(200, responseData)
 
 }
 
@@ -196,7 +227,7 @@ func lassoLarsReponse(c *gin.Context) {
 	bodyAsByteArray, err := io.ReadAll(c.Request.Body)
 
 	if err != nil {
-		log.Fatalf("could not lasso Lars: %v", err)
+		log.Fatalf("could not lasso lars: %v", err)
 		c.JSON(400, gin.H{"error": "Bad Request"})
 		return
 	}
@@ -206,7 +237,7 @@ func lassoLarsReponse(c *gin.Context) {
 	err = json.Unmarshal(bodyAsByteArray, &data)
 
 	if err != nil {
-		log.Fatalf("could not lasso Lars: %v", err)
+		log.Fatalf("could not lasso lars: %v", err)
 		c.JSON(404, gin.H{"error": "missing parameter"})
 		return
 	}
@@ -226,12 +257,20 @@ func lassoLarsReponse(c *gin.Context) {
 	})
 
 	if err != nil {
-		log.Fatalf("could not lasso Lars: %v", err)
-		c.JSON(500, gin.H{"error": "could not lasso Lars"})
+		log.Fatalf("could not lasso lars: %v", err)
+		c.JSON(500, gin.H{"error": "could not lasso lars"})
 		return
 	}
 
-	c.JSON(200, gin.H{"dataFrame": r})
+	responseData, err := json.Marshal(r)
+
+	if err != nil {
+		log.Fatalf("response encoding lasso lars: %v", err)
+		c.JSON(505, gin.H{"error": "could not lasso lars"})
+		return
+	}
+
+	c.JSON(200, responseData)
 
 }
 
@@ -240,7 +279,7 @@ func bayesianRidgeResponse(c *gin.Context) {
 	bodyAsByteArray, err := io.ReadAll(c.Request.Body)
 
 	if err != nil {
-		log.Fatalf("could not bayesian Ridge: %v", err)
+		log.Fatalf("could not bayesian ridge: %v", err)
 		c.JSON(400, gin.H{"error": "Bad Request"})
 		return
 	}
@@ -250,7 +289,7 @@ func bayesianRidgeResponse(c *gin.Context) {
 	err = json.Unmarshal(bodyAsByteArray, &data)
 
 	if err != nil {
-		log.Fatalf("could not bayesian Ridge: %v", err)
+		log.Fatalf("could not bayesian ridge: %v", err)
 		c.JSON(404, gin.H{"error": "missing parameter"})
 		return
 	}
@@ -269,12 +308,20 @@ func bayesianRidgeResponse(c *gin.Context) {
 	})
 
 	if err != nil {
-		log.Fatalf("could not bayesian Ridge: %v", err)
-		c.JSON(500, gin.H{"error": "could not bayesian Ridge"})
+		log.Fatalf("could not bayesian ridge: %v", err)
+		c.JSON(500, gin.H{"error": "could not bayesian ridge"})
 		return
 	}
 
-	c.JSON(200, gin.H{"dataFrame": r})
+	responseData, err := json.Marshal(r)
+
+	if err != nil {
+		log.Fatalf("response encoding bayesian ridge: %v", err)
+		c.JSON(505, gin.H{"error": "could not bayesian ridge"})
+		return
+	}
+
+	c.JSON(200, responseData)
 
 }
 
@@ -283,7 +330,7 @@ func tweedieRegressorResponse(c *gin.Context) {
 	bodyAsByteArray, err := io.ReadAll(c.Request.Body)
 
 	if err != nil {
-		log.Fatalf("could not tweedie Regressor: %v", err)
+		log.Fatalf("could not tweedie regressor: %v", err)
 		c.JSON(400, gin.H{"error": "Bad Request"})
 		return
 	}
@@ -293,7 +340,7 @@ func tweedieRegressorResponse(c *gin.Context) {
 	err = json.Unmarshal(bodyAsByteArray, &data)
 
 	if err != nil {
-		log.Fatalf("could not tweedie Regressor: %v", err)
+		log.Fatalf("could not tweedie regressor: %v", err)
 		c.JSON(404, gin.H{"error": "missing parameter"})
 		return
 	}
@@ -312,12 +359,20 @@ func tweedieRegressorResponse(c *gin.Context) {
 	})
 
 	if err != nil {
-		log.Fatalf("could not tweedie Regressor: %v", err)
-		c.JSON(500, gin.H{"error": "could not tweedie Regressor"})
+		log.Fatalf("could not tweedie regressor: %v", err)
+		c.JSON(500, gin.H{"error": "could not tweedie regressor"})
 		return
 	}
 
-	c.JSON(200, gin.H{"dataFrame": r})
+	responseData, err := json.Marshal(r)
+
+	if err != nil {
+		log.Fatalf("response encoding tweedie regressor: %v", err)
+		c.JSON(505, gin.H{"error": "could not tweedie regressor"})
+		return
+	}
+
+	c.JSON(200, responseData)
 
 }
 
@@ -336,7 +391,7 @@ func sgdClassifierResponse(c *gin.Context) {
 	err = json.Unmarshal(bodyAsByteArray, &data)
 
 	if err != nil {
-		log.Fatalf("could not sgd Classifier: %v", err)
+		log.Fatalf("could not sgd classifier: %v", err)
 		c.JSON(404, gin.H{"error": "missing parameter"})
 		return
 	}
@@ -355,12 +410,20 @@ func sgdClassifierResponse(c *gin.Context) {
 	})
 
 	if err != nil {
-		log.Fatalf("could not sgd Classifier: %v", err)
-		c.JSON(500, gin.H{"error": "could not sgd Classifier"})
+		log.Fatalf("could not sgd classifier: %v", err)
+		c.JSON(500, gin.H{"error": "could not sgd classifier"})
 		return
 	}
 
-	c.JSON(200, gin.H{"dataFrame": r})
+	responseData, err := json.Marshal(r)
+
+	if err != nil {
+		log.Fatalf("response encoding sgd classifier: %v", err)
+		c.JSON(505, gin.H{"error": "could not sgd classifier"})
+		return
+	}
+
+	c.JSON(200, responseData)
 
 }
 
@@ -369,7 +432,7 @@ func elasticNetResponse(c *gin.Context) {
 	bodyAsByteArray, err := io.ReadAll(c.Request.Body)
 
 	if err != nil {
-		log.Fatalf("could not elastic Net: %v", err)
+		log.Fatalf("could not elastic net: %v", err)
 		c.JSON(400, gin.H{"error": "Bad Request"})
 		return
 	}
@@ -379,7 +442,7 @@ func elasticNetResponse(c *gin.Context) {
 	err = json.Unmarshal(bodyAsByteArray, &data)
 
 	if err != nil {
-		log.Fatalf("could not elastic Net: %v", err)
+		log.Fatalf("could not elastic net: %v", err)
 		c.JSON(404, gin.H{"error": "missing parameter"})
 		return
 	}
@@ -399,11 +462,19 @@ func elasticNetResponse(c *gin.Context) {
 	})
 
 	if err != nil {
-		log.Fatalf("could not elastic Net: %v", err)
-		c.JSON(500, gin.H{"error": "could not elastic Net"})
+		log.Fatalf("could not elastic net: %v", err)
+		c.JSON(500, gin.H{"error": "could not elastic net"})
 		return
 	}
 
-	c.JSON(200, gin.H{"dataFrame": r})
+	responseData, err := json.Marshal(r)
+
+	if err != nil {
+		log.Fatalf("response encoding elastic net: %v", err)
+		c.JSON(505, gin.H{"error": "could not elastic net"})
+		return
+	}
+
+	c.JSON(200, responseData)
 
 }

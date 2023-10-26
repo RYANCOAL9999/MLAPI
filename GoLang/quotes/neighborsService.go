@@ -31,7 +31,7 @@ func nearestNeighborsRespone(c *gin.Context) {
 	bodyAsByteArray, err := io.ReadAll(c.Request.Body)
 
 	if err != nil {
-		log.Fatalf("could not nearest Neighbors: %v", err)
+		log.Fatalf("could not nearest neighbors: %v", err)
 		c.JSON(400, gin.H{"error": "Bad Request"})
 		return
 	}
@@ -41,7 +41,7 @@ func nearestNeighborsRespone(c *gin.Context) {
 	err = json.Unmarshal(bodyAsByteArray, &data)
 
 	if err != nil {
-		log.Fatalf("could not nearest Neighbors: %v", err)
+		log.Fatalf("could not nearest neighbors: %v", err)
 		c.JSON(404, gin.H{"error": "missing parameter"})
 		return
 	}
@@ -59,12 +59,20 @@ func nearestNeighborsRespone(c *gin.Context) {
 	})
 
 	if err != nil {
-		log.Fatalf("could not nearest Neighbors: %v", err)
-		c.JSON(500, gin.H{"error": "could not nearest Neighbors"})
+		log.Fatalf("could not nearest neighbors: %v", err)
+		c.JSON(500, gin.H{"error": "could not nearest neighbors"})
 		return
 	}
 
-	c.JSON(200, gin.H{"dataFrame": r})
+	responseData, err := json.Marshal(r)
+
+	if err != nil {
+		log.Fatalf("response encoding nearest neighbors: %v", err)
+		c.JSON(505, gin.H{"error": "could not nearest neighbors"})
+		return
+	}
+
+	c.JSON(200, responseData)
 
 }
 
@@ -73,7 +81,7 @@ func kdTreeResponse(c *gin.Context) {
 	bodyAsByteArray, err := io.ReadAll(c.Request.Body)
 
 	if err != nil {
-		log.Fatalf("could not kd Tree: %v", err)
+		log.Fatalf("could not kd tree: %v", err)
 		c.JSON(400, gin.H{"error": "Bad Request"})
 		return
 	}
@@ -83,7 +91,7 @@ func kdTreeResponse(c *gin.Context) {
 	err = json.Unmarshal(bodyAsByteArray, &data)
 
 	if err != nil {
-		log.Fatalf("could not kd Tree: %v", err)
+		log.Fatalf("could not kd tree: %v", err)
 		c.JSON(404, gin.H{"error": "missing parameter"})
 		return
 	}
@@ -103,12 +111,20 @@ func kdTreeResponse(c *gin.Context) {
 	})
 
 	if err != nil {
-		log.Fatalf("could not kd Tree: %v", err)
+		log.Fatalf("could not kd tree: %v", err)
 		c.JSON(500, gin.H{"error": "could not kd Tree"})
 		return
 	}
 
-	c.JSON(200, gin.H{"dataFrame": r})
+	responseData, err := json.Marshal(r)
+
+	if err != nil {
+		log.Fatalf("response encoding kd tree: %v", err)
+		c.JSON(505, gin.H{"error": "could not kd tree"})
+		return
+	}
+
+	c.JSON(200, responseData)
 
 }
 
@@ -117,7 +133,7 @@ func nearestCentroidResponse(c *gin.Context) {
 	bodyAsByteArray, err := io.ReadAll(c.Request.Body)
 
 	if err != nil {
-		log.Fatalf("could not nearest Centroid: %v", err)
+		log.Fatalf("could not nearest centroid: %v", err)
 		c.JSON(400, gin.H{"error": "Bad Request"})
 		return
 	}
@@ -127,7 +143,7 @@ func nearestCentroidResponse(c *gin.Context) {
 	err = json.Unmarshal(bodyAsByteArray, &data)
 
 	if err != nil {
-		log.Fatalf("could not nearest Centroid: %v", err)
+		log.Fatalf("could not nearest centroid: %v", err)
 		c.JSON(404, gin.H{"error": "missing parameter"})
 		return
 	}
@@ -146,11 +162,19 @@ func nearestCentroidResponse(c *gin.Context) {
 	})
 
 	if err != nil {
-		log.Fatalf("could not nearest Centroid: %v", err)
-		c.JSON(500, gin.H{"error": "could not nearest Centroid"})
+		log.Fatalf("could not nearest centroid: %v", err)
+		c.JSON(500, gin.H{"error": "could not nearest centroid"})
 		return
 	}
 
-	c.JSON(200, gin.H{"dataFrame": r})
+	responseData, err := json.Marshal(r)
+
+	if err != nil {
+		log.Fatalf("response encoding nearest centroid: %v", err)
+		c.JSON(505, gin.H{"error": "could not nearest centroid"})
+		return
+	}
+
+	c.JSON(200, responseData)
 
 }

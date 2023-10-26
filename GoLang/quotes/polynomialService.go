@@ -31,7 +31,7 @@ func polynomialFeaturesResponse(c *gin.Context) {
 	bodyAsByteArray, err := io.ReadAll(c.Request.Body)
 
 	if err != nil {
-		log.Fatalf("could not polynomial Features: %v", err)
+		log.Fatalf("could not polynomial features: %v", err)
 		c.JSON(400, gin.H{"error": "Bad Request"})
 		return
 	}
@@ -41,7 +41,7 @@ func polynomialFeaturesResponse(c *gin.Context) {
 	err = json.Unmarshal(bodyAsByteArray, &data)
 
 	if err != nil {
-		log.Fatalf("could not polynomial Features: %v", err)
+		log.Fatalf("could not polynomial features: %v", err)
 		c.JSON(404, gin.H{"error": "missing parameter"})
 		return
 	}
@@ -61,12 +61,20 @@ func polynomialFeaturesResponse(c *gin.Context) {
 	})
 
 	if err != nil {
-		log.Fatalf("could not polynomial Features: %v", err)
-		c.JSON(500, gin.H{"error": "could not polynomial Features"})
+		log.Fatalf("could not polynomial features: %v", err)
+		c.JSON(500, gin.H{"error": "could not polynomial features"})
 		return
 	}
 
-	c.JSON(200, gin.H{"dataFrame": r})
+	responseData, err := json.Marshal(r)
+
+	if err != nil {
+		log.Fatalf("response encoding polynomial features: %v", err)
+		c.JSON(505, gin.H{"error": "could not polynomial features"})
+		return
+	}
+
+	c.JSON(200, responseData)
 
 }
 
@@ -75,7 +83,7 @@ func polynomialFeaturesFitTransformResponse(c *gin.Context) {
 	bodyAsByteArray, err := io.ReadAll(c.Request.Body)
 
 	if err != nil {
-		log.Fatalf("could not polynomial Features Fit Transform: %v", err)
+		log.Fatalf("could not polynomial features fit transform: %v", err)
 		c.JSON(400, gin.H{"error": "Bad Request"})
 		return
 	}
@@ -85,7 +93,7 @@ func polynomialFeaturesFitTransformResponse(c *gin.Context) {
 	err = json.Unmarshal(bodyAsByteArray, &data)
 
 	if err != nil {
-		log.Fatalf("could not polynomial Features Fit Transform: %v", err)
+		log.Fatalf("could not polynomial features fit transform: %v", err)
 		c.JSON(404, gin.H{"error": "missing parameter"})
 		return
 	}
@@ -105,11 +113,19 @@ func polynomialFeaturesFitTransformResponse(c *gin.Context) {
 	})
 
 	if err != nil {
-		log.Fatalf("could not polynomial Features Fit Transform: %v", err)
-		c.JSON(500, gin.H{"error": "could not polynomial Features Fit Transform"})
+		log.Fatalf("could not polynomial features fit transform: %v", err)
+		c.JSON(500, gin.H{"error": "could not polynomial features fit transform"})
 		return
 	}
 
-	c.JSON(200, gin.H{"dataFrame": r})
+	responseData, err := json.Marshal(r)
+
+	if err != nil {
+		log.Fatalf("response encoding polynomial features fit transform: %v", err)
+		c.JSON(505, gin.H{"error": "could not polynomial features fit transform"})
+		return
+	}
+
+	c.JSON(200, responseData)
 
 }

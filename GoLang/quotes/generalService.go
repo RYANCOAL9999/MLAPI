@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"flag"
 	"log"
 	"time"
@@ -32,12 +33,20 @@ func infoResponse(c *gin.Context) {
 	r, err := generalClient.InfoEvent(ctx, &pb.InfoRequest{})
 
 	if err != nil {
-		log.Fatalf("could not greet: %v", err)
-		c.JSON(500, gin.H{"error": "could not greet"})
+		log.Fatalf("could not info: %v", err)
+		c.JSON(500, gin.H{"error": "could not info"})
 		return
 	}
 
-	c.JSON(200, gin.H{"dataFrame": r})
+	responseData, err := json.Marshal(r)
+
+	if err != nil {
+		log.Fatalf("response encoding info: %v", err)
+		c.JSON(505, gin.H{"error": "could not info"})
+		return
+	}
+
+	c.JSON(200, responseData)
 
 }
 
@@ -49,12 +58,20 @@ func describleResponse(c *gin.Context) {
 	r, err := generalClient.DescriblerEvent(ctx, &pb.DescribeRequest{})
 
 	if err != nil {
-		log.Fatalf("could not greet: %v", err)
-		c.JSON(500, gin.H{"error": "could not greet"})
+		log.Fatalf("could not describle: %v", err)
+		c.JSON(500, gin.H{"error": "could not describle"})
 		return
 	}
 
-	c.JSON(200, gin.H{"dataFrame": r})
+	responseData, err := json.Marshal(r)
+
+	if err != nil {
+		log.Fatalf("response encoding info: %v", err)
+		c.JSON(505, gin.H{"error": "could not describle"})
+		return
+	}
+
+	c.JSON(200, responseData)
 
 }
 
@@ -66,11 +83,19 @@ func headerResponse(c *gin.Context) {
 	r, err := generalClient.HeaderEvent(ctx, &pb.HeaderRequest{})
 
 	if err != nil {
-		log.Fatalf("could not greet: %v", err)
-		c.JSON(500, gin.H{"error": "could not greet"})
+		log.Fatalf("could not header: %v", err)
+		c.JSON(500, gin.H{"error": "could not header"})
 		return
 	}
 
-	c.JSON(200, gin.H{"dataFrame": r})
+	responseData, err := json.Marshal(r)
+
+	if err != nil {
+		log.Fatalf("response encoding header: %v", err)
+		c.JSON(505, gin.H{"error": "could not header"})
+		return
+	}
+
+	c.JSON(200, responseData)
 
 }
