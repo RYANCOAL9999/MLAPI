@@ -27,6 +27,6 @@ class GeneralService(object):
     def describleResponse(self)->dict:
         with self.__channel:
             request_message = DescribeRequest()
-            response = self.__stub.InfoEvent(request_message)
+            response = self.__stub.DescriblerEvent(request_message)
             return asdict(response)
 
