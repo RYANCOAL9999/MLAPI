@@ -1,137 +1,134 @@
 service: quotes
 
-frameworkVersion: '>=2.0'
+frameworkVersion: '3'
+
+custom:
+  wsgi:
+    app: app.app
 
 provider:
   name: aws
-  runtime: go1.x
+  runtime: nodejs18.x
 
 functions:
   headAPI:
-    handler: bin/main
+    handler: index.handler
     events:
       - http:
           path: /api/head
           method: GET
   infoAPI:
-    handler: bin/main
+    handler: index.handler
     events:
       - http:
           path: /api/info
           method: GET
   descibleAPI:
-    handler: bin/main
+    handler: index.handler
     events:
       - http:
           path: /api/descible
           method: GET  
   linearSVCAPI:
-    handler: bin/main
+    handler: index.handler
     events:
       - http:
           path: /api/linearSVC
           method: POST
   linearSVRAPI:
-    handler: bin/main
+    handler: index.handler
     events:
       - http:
           path: /api/linearSVR
           method: POST
   svcAPI:
-    handler: bin/main
+    handler: index.handler
     events:
       - http:
           path: /api/svc
           method: POST
   polynomialFeaturesAPI:
-    handler: bin/main
+    handler: index.handler
     events:
       - http:
           path: /api/polynomialFeatures
           method: POST
   polynomialFeaturesFitTransformAPI:
-    handler: bin/main
+    handler: index.handler
     events:
       - http:
           path: /api/polynomialFeaturesFitTransform
           method: POST
   nearestNeighborsAPI:
-    handler: bin/main
+    handler: index.handler
     events:
       - http:
           path: /api/nearestNeighbors
           method: POST
   kdTreeAPI:
-    handler: bin/main
+    handler: index.handler
     events:
       - http:
           path: /api/kdTree
           method: POST
   nearestCentroidAPI:
-    handler: bin/main
+    handler: index.handler
     events:
       - http:
           path: /api/nearestCentroid
           method: POST
   linearRegressionAPI:
-    handler: bin/main
+    handler: index.handler
     events:
       - http:
           path: /api/linearRegression
           method: POST
   ridgeAPI:
-    handler: bin/main
+    handler: index.handler
     events:
       - http:
           path: /api/ridge
           method: POST
   ridgeCVAPI:
-    handler: bin/main
+    handler: index.handler
     events:
       - http:
           path: /api/ridgeCV
           method: POST
   lassoAPI:
-    handler: bin/main
+    handler: index.handler
     events:
       - http:
           path: /api/lasso
           method: POST
   lassoLarsAPI:
-    handler: bin/main
+    handler: index.handler
     events:
       - http:
           path: /api/lassoLars
           method: POST
   bayesianRidgeAPI:
-    handler: bin/main
+    handler: index.handler
     events:
       - http:
           path: /api/bayesianRidge
           method: POST
   tweedieRegressorAPI:
-    handler: bin/main
+    handler: index.handler
     events:
       - http:
           path: /api/tweedieRegressor
           method: POST
   sgdClassifierAPI:
-    handler: bin/main
+    handler: index.handler
     events:
       - http:
           path: /api/sgdClassifier
           method: POST
   elasticNetAPI:
-    handler: bin/main
+    handler: index.handler
     events:
       - http:
           path: /api/elasticNet
           method: POST
-                                                                                                                                                         
-package:
-  patterns:
-    - '!*/**'
-    - bin/main
-  
-
 

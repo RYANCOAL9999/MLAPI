@@ -2,5 +2,5 @@ name: quotes
 org: ryancoal9999
 description: Deploys a Python Flask API service, backed by DynamoDB, with traditional Serverless Framework
 keywords: aws, serverless, faas, lambda, python, flask, dynamodb
-repo: https://github.com/serverless/examples/aws-python-flask-dynamodb-api
+repo: https://github.com/RYANCOAL9999/MLAPI/Python/quotes
 license: MIT

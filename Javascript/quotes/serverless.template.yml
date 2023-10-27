@@ -1,0 +1,6 @@
+name: quotes
+org: ryancoal9999
+description: Deploys a Nodejs Express API service, backed by DynamoDB, with traditional Serverless Framework
+keywords: aws, serverless, faas, lambda, Node.js, Express, dynamodb
+repo: https://github.com/RYANCOAL9999/MLAPI/Javascript/quotes
+license: MIT
