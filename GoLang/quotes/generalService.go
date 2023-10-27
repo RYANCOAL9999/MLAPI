@@ -66,7 +66,7 @@ func describleResponse(generalGRPCClient *generalGRPCClient) gin.HandlerFunc {
 
 }
 
-func headerResponse(generalGRPCClient *generalGRPCClient) gin.HandlerFunc {
+func headResponse(generalGRPCClient *generalGRPCClient) gin.HandlerFunc {
 	return func(c *gin.Context) {
 
 		const event_name = "header"

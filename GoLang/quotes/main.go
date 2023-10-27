@@ -48,7 +48,7 @@ func init() {
 		return
 	}
 
-	r.GET("/api/head", headerResponse(generalClient))
+	r.GET("/api/head", headResponse(generalClient))
 
 	r.GET("/api/info", infoResponse(generalClient))
 
