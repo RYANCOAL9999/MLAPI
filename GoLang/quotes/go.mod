@@ -3,7 +3,7 @@ module quotes
 go 1.21.3
 
 require (
-	github.com/RYANCOAL9999/AI_Go_Proto_File v0.0.0-20231026173253-8ed313f11eb0 // indirect
+	github.com/RYANCOAL9999/AI_Go_Proto_File v0.0.0-20231026223256-1d820f3af4ec // indirect
 	github.com/aws/aws-lambda-go v1.41.0 // indirect
 	github.com/awslabs/aws-lambda-go-api-proxy v0.16.0 // indirect
 	github.com/bytedance/sonic v1.10.2 // indirect
