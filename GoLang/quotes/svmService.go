@@ -2,10 +2,7 @@ package main
 
 import (
 	"context"
-	"encoding/json"
-	"flag"
-	"io"
-	"log"
+	"net/http"
 	"time"
 
 	pb "github.com/RYANCOAL9999/AI_Go_Proto_File"
@@ -14,167 +11,88 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-var svmClient pb.SVMServiceClient
-
-var svmAddr = flag.String("addr", "localhost:50054", "the address to connect to")
-
-func init() {
-	conn, err := grpc.Dial(*svmAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
-	if err != nil {
-		log.Fatalf("Could not connect to gRPC server: %v", err)
-	}
-	svmClient = pb.NewSVMServiceClient(conn)
+type svmGRPCClient struct {
+	client pb.SVMServiceClient
 }
 
-func linearSVCResponse(c *gin.Context) {
-
-	bodyAsByteArray, err := io.ReadAll(c.Request.Body)
-
+func newSVMGRPCClient(addr string) (*svmGRPCClient, error) {
+	conn, err := grpc.Dial(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		log.Fatalf("could not linear svc: %v", err)
-		c.JSON(400, gin.H{"error": "Bad Request"})
-		return
+		return nil, err
 	}
-
-	var data pb.LinearRequest
-
-	err = json.Unmarshal(bodyAsByteArray, &data)
-
-	if err != nil {
-		log.Fatalf("could not linear svc: %v", err)
-		c.JSON(404, gin.H{"error": "missing parameter"})
-		return
-	}
-
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-	defer cancel()
-
-	r, err := svmClient.LinearSVCEvent(ctx, &pb.LinearRequest{
-		XDropData:    data.XDropData,
-		YDropData:    data.YDropData,
-		Size:         data.Size,
-		Random:       data.Random,
-		Key:          data.Key,
-		SampleWeight: data.SampleWeight,
-		Kwargs:       data.Kwargs,
-	})
-
-	if err != nil {
-		log.Fatalf("could not linear svc: %v", err)
-		c.JSON(500, gin.H{"error": "could not linear svc"})
-		return
-	}
-
-	responseData, err := json.Marshal(r)
-
-	if err != nil {
-		log.Fatalf("response encoding linear svc: %v", err)
-		c.JSON(505, gin.H{"error": "could not linear svc"})
-		return
-	}
-
-	c.JSON(200, responseData)
-
+	return &svmGRPCClient{
+		client: pb.NewSVMServiceClient(conn),
+	}, nil
 }
 
-func linearSVRResponse(c *gin.Context) {
+func linearSVCResponse(svmClient *svmGRPCClient) gin.HandlerFunc {
+	return func(c *gin.Context) {
 
-	bodyAsByteArray, err := io.ReadAll(c.Request.Body)
+		const event_name = "linear svc"
 
-	if err != nil {
-		log.Fatalf("could not linear svr: %v", err)
-		c.JSON(400, gin.H{"error": "Bad Request"})
-		return
+		var data pb.LinearRequest
+		if err := readRequestData(c, &data); err != nil {
+			handleBadRequestError(c, err, http.StatusBadRequest, event_name)
+			return
+		}
+
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+		defer cancel()
+
+		response, err := svmClient.client.LinearSVCEvent(ctx, &data)
+		if err != nil {
+			handleGRPCError(c, err, event_name)
+			return
+		}
+
+		sendResponse(c, response, event_name)
 	}
-
-	var data pb.LinearRequest
-
-	err = json.Unmarshal(bodyAsByteArray, &data)
-
-	if err != nil {
-		log.Fatalf("could not linear svr: %v", err)
-		c.JSON(404, gin.H{"error": "missing parameter"})
-		return
-	}
-
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-	defer cancel()
-
-	r, err := svmClient.LinearSVREvent(ctx, &pb.LinearRequest{
-		XDropData:    data.XDropData,
-		YDropData:    data.YDropData,
-		Size:         data.Size,
-		Random:       data.Random,
-		Key:          data.Key,
-		SampleWeight: data.SampleWeight,
-		Kwargs:       data.Kwargs,
-	})
-
-	if err != nil {
-		log.Fatalf("could not linear svr: %v", err)
-		c.JSON(500, gin.H{"error": "could not linear svr"})
-		return
-	}
-
-	responseData, err := json.Marshal(r)
-
-	if err != nil {
-		log.Fatalf("response encoding linear svr: %v", err)
-		c.JSON(505, gin.H{"error": "could not linear svr"})
-		return
-	}
-
-	c.JSON(200, responseData)
-
 }
 
-func svcResponse(c *gin.Context) {
+func linearSVRResponse(svmClient *svmGRPCClient) gin.HandlerFunc {
+	return func(c *gin.Context) {
 
-	bodyAsByteArray, err := io.ReadAll(c.Request.Body)
+		const event_name = "linear svr"
 
-	if err != nil {
-		log.Fatalf("could not svc: %v", err)
-		c.JSON(400, gin.H{"error": "Bad Request"})
-		return
+		var data pb.LinearRequest
+		if err := readRequestData(c, &data); err != nil {
+			handleBadRequestError(c, err, http.StatusBadRequest, event_name)
+			return
+		}
+
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+		defer cancel()
+
+		response, err := svmClient.client.LinearSVREvent(ctx, &data)
+		if err != nil {
+			handleGRPCError(c, err, event_name)
+			return
+		}
+
+		sendResponse(c, response, event_name)
 	}
+}
 
-	var data pb.SVCRequest
+func svcResponse(svmClient *svmGRPCClient) gin.HandlerFunc {
+	return func(c *gin.Context) {
 
-	err = json.Unmarshal(bodyAsByteArray, &data)
+		const event_name = "svc"
 
-	if err != nil {
-		log.Fatalf("could not svc: %v", err)
-		c.JSON(404, gin.H{"error": "missing parameter"})
-		return
+		var data pb.SVCRequest
+		if err := readRequestData(c, &data); err != nil {
+			handleBadRequestError(c, err, http.StatusBadRequest, event_name)
+			return
+		}
+
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+		defer cancel()
+
+		response, err := svmClient.client.SVCEvent(ctx, &data)
+		if err != nil {
+			handleGRPCError(c, err, event_name)
+			return
+		}
+
+		sendResponse(c, response, event_name)
 	}
-
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-	defer cancel()
-
-	r, err := svmClient.SVCEvent(ctx, &pb.SVCRequest{
-		XDropData:    data.XDropData,
-		YDropData:    data.YDropData,
-		Size:         data.Size,
-		Random:       data.Random,
-		Key:          data.Key,
-		SampleWeight: data.SampleWeight,
-		Kwargs:       data.Kwargs,
-	})
-
-	if err != nil {
-		log.Fatalf("could not svc: %v", err)
-		c.JSON(500, gin.H{"error": "could not svc"})
-		return
-	}
-
-	responseData, err := json.Marshal(r)
-
-	if err != nil {
-		log.Fatalf("response encoding svc: %v", err)
-		c.JSON(505, gin.H{"error": "could not svc"})
-		return
-	}
-
-	c.JSON(200, responseData)
-
 }

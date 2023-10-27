@@ -1,0 +1,29 @@
+{
+  "name": "quotes",
+  "version": "1.0.0",
+  "description": "API server with Machine Learning",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RYANCOAL9999/MLAPI/Javascript/quotes"
+  },
+  "keywords": [
+    "Machine",
+    "Learning"
+  ],
+  "author": "RYANCOAL9999",
+  "license": "Unlicense",
+  "dependencies": {
+    "express": "^4.18.2",
+    "serverless-http": "^3.1.1",
+    "@grpc/grpc-js": "^1.8.0",
+    "@grpc/grpc-js-xds": "^1.8.0",
+    "@grpc/proto-loader": "^0.6.0",
+    "async": "^1.5.2",
+    "lodash": "^4.6.1",
+    "minimist": "^1.2.0"
+  }
+}

@@ -31,15 +31,6 @@ svmService = SVMService("localhost:" + generatePortMulti(gRPCKey, port, 50054) )
 
 app = Flask(__name__)
 
-@app.route("/", methods=["GET"])
-def handle_root_request()->Response: 
-    return make_response(
-        jsonify(
-            message = 'Do not wanna attack my server!'
-        ),
-        HTTP_204_NO_CONTENT
-    )
-
 @app.route("/api/head", methods=["GET"])
 def head()->Response:  
     return make_response(
@@ -145,11 +136,11 @@ def polynomialFeaturesFitTransform()->Response:
 
 @app.route("/api/nearestNeighbors", methods=["POST"])
 def nearestNeighbors()->Response: 
-    response = checkAPI(request,neighborsService.nearestNeighborsRespone)
+    response = checkAPI(request,neighborsService.nearestNeighborsResponse)
     if response is None:
         response = make_response(
             jsonify(
-                neighborsService.nearestNeighborsRespone(
+                neighborsService.nearestNeighborsResponse(
                     request.json
                 )
             ),
@@ -201,11 +192,11 @@ def linearRegression()->Response:
 
 @app.route("/api/ridge", methods=["POST"])
 def ridge()->Response: 
-    response = checkAPI(request, linearService.ridgeRespone)
+    response = checkAPI(request, linearService.ridgeResponse)
     if response is None:
         response = make_response(
             jsonify(
-                linearService.ridgeRespone(
+                linearService.ridgeResponse(
                     request.json
                 )
             ),
@@ -215,11 +206,11 @@ def ridge()->Response:
 
 @app.route("/api/ridgeCV", methods=["POST"])
 def ridgeCV()->Response: 
-    response = checkAPI(request, linearService.ridgeCVReponse)
+    response = checkAPI(request, linearService.ridgeCVResponse)
     if response is None:
         response = make_response(
             jsonify(
-                linearService.ridgeCVReponse(
+                linearService.ridgeCVResponse(
                     request.json
                 )
             ),
@@ -229,11 +220,11 @@ def ridgeCV()->Response:
 
 @app.route("/api/lasso", methods=["POST"])
 def lasso()->Response: 
-    response = checkAPI(request, linearService.lassoReponse)
+    response = checkAPI(request, linearService.lassoResponse)
     if response is None:
         response = make_response(
             jsonify(
-                linearService.lassoReponse(
+                linearService.lassoResponse(
                     request.json
                 )
             ),
@@ -243,11 +234,11 @@ def lasso()->Response:
 
 @app.route("/api/lassoLars", methods=["POST"])
 def lassoLars()->Response: 
-    response = checkAPI(request, linearService.lassoLarsReponse)
+    response = checkAPI(request, linearService.lassoLarsResponse)
     if response is None:
         response = make_response(
             jsonify(
-                linearService.lassoLarsReponse(
+                linearService.lassoLarsResponse(
                     request.json
                 )
             ),
@@ -299,11 +290,11 @@ def sgdClassifier()->Response:
 
 @app.route("/api/elasticNet", methods=["POST"])
 def elasticNet()->Response:
-    response = checkAPI(request, linearService.elasticNetReponse)
+    response = checkAPI(request, linearService.elasticNetResponse)
     if response is None:
         response = make_response(
             jsonify(
-                linearService.elasticNetReponse(
+                linearService.elasticNetResponse(
                     request.json
                 )
             ),

@@ -2,9 +2,6 @@ package main
 
 import (
 	"context"
-	"encoding/json"
-	"flag"
-	"log"
 	"time"
 
 	pb "github.com/RYANCOAL9999/AI_Go_Proto_File"
@@ -13,89 +10,78 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-var generalAddr = flag.String("addr", "localhost:50051", "the address to connect to")
-
-var generalClient pb.GeneralServiceClient
-
-func init() {
-	conn, err := grpc.Dial(*generalAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
-	if err != nil {
-		log.Fatalf("Could not connect to gRPC server: %v", err)
-	}
-	generalClient = pb.NewGeneralServiceClient(conn)
+type generalGRPCClient struct {
+	client pb.GeneralServiceClient
 }
 
-func infoResponse(c *gin.Context) {
-
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-	defer cancel()
-
-	r, err := generalClient.InfoEvent(ctx, &pb.InfoRequest{})
-
+func newGeneralGRPCClient(addr string) (*generalGRPCClient, error) {
+	conn, err := grpc.Dial(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		log.Fatalf("could not info: %v", err)
-		c.JSON(500, gin.H{"error": "could not info"})
-		return
+		return nil, err
 	}
-
-	responseData, err := json.Marshal(r)
-
-	if err != nil {
-		log.Fatalf("response encoding info: %v", err)
-		c.JSON(505, gin.H{"error": "could not info"})
-		return
-	}
-
-	c.JSON(200, responseData)
-
+	return &generalGRPCClient{
+		client: pb.NewGeneralServiceClient(conn),
+	}, nil
 }
 
-func describleResponse(c *gin.Context) {
+func infoResponse(generalClient *generalGRPCClient) gin.HandlerFunc {
+	return func(c *gin.Context) {
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-	defer cancel()
+		const event_name = "info"
 
-	r, err := generalClient.DescriblerEvent(ctx, &pb.DescribeRequest{})
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+		defer cancel()
 
-	if err != nil {
-		log.Fatalf("could not describle: %v", err)
-		c.JSON(500, gin.H{"error": "could not describle"})
-		return
+		response, err := generalClient.client.InfoEvent(ctx, &pb.InfoRequest{})
+
+		if err != nil {
+			handleGRPCError(c, err, event_name)
+			return
+		}
+
+		sendResponse(c, response, event_name)
+
 	}
-
-	responseData, err := json.Marshal(r)
-
-	if err != nil {
-		log.Fatalf("response encoding info: %v", err)
-		c.JSON(505, gin.H{"error": "could not describle"})
-		return
-	}
-
-	c.JSON(200, responseData)
 
 }
 
-func headerResponse(c *gin.Context) {
+func describleResponse(generalGRPCClient *generalGRPCClient) gin.HandlerFunc {
+	return func(c *gin.Context) {
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-	defer cancel()
+		const event_name = "describle"
 
-	r, err := generalClient.HeaderEvent(ctx, &pb.HeaderRequest{})
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+		defer cancel()
 
-	if err != nil {
-		log.Fatalf("could not header: %v", err)
-		c.JSON(500, gin.H{"error": "could not header"})
-		return
+		response, err := generalGRPCClient.client.DescriblerEvent(ctx, &pb.DescribeRequest{})
+
+		if err != nil {
+			handleGRPCError(c, err, event_name)
+			return
+		}
+
+		sendResponse(c, response, event_name)
+
 	}
 
-	responseData, err := json.Marshal(r)
+}
 
-	if err != nil {
-		log.Fatalf("response encoding header: %v", err)
-		c.JSON(505, gin.H{"error": "could not header"})
-		return
+func headerResponse(generalGRPCClient *generalGRPCClient) gin.HandlerFunc {
+	return func(c *gin.Context) {
+
+		const event_name = "header"
+
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+		defer cancel()
+
+		response, err := generalGRPCClient.client.HeaderEvent(ctx, &pb.HeaderRequest{})
+
+		if err != nil {
+			handleGRPCError(c, err, event_name)
+			return
+		}
+
+		sendResponse(c, response, event_name)
+
 	}
-
-	c.JSON(200, responseData)
-
 }

@@ -2,10 +2,7 @@ package main
 
 import (
 	"context"
-	"encoding/json"
-	"flag"
-	"io"
-	"log"
+	"net/http"
 	"time"
 
 	pb "github.com/RYANCOAL9999/AI_Go_Proto_File"
@@ -14,118 +11,69 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-var polynomialAddress = flag.String("addr", "localhost:50053", "the address to connect to")
-
-var polynomialClient pb.PolynomialServiceClient
-
-func init() {
-	conn, err := grpc.Dial(*polynomialAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
-	if err != nil {
-		log.Fatalf("Could not connect to gRPC server: %v", err)
-	}
-	polynomialClient = pb.NewPolynomialServiceClient(conn)
+type polynomialGRPCClient struct {
+	client pb.PolynomialServiceClient
 }
 
-func polynomialFeaturesResponse(c *gin.Context) {
-
-	bodyAsByteArray, err := io.ReadAll(c.Request.Body)
-
+func newPolynomialGRPCClient(addr string) (*polynomialGRPCClient, error) {
+	conn, err := grpc.Dial(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		log.Fatalf("could not polynomial features: %v", err)
-		c.JSON(400, gin.H{"error": "Bad Request"})
-		return
+		return nil, err
 	}
+	return &polynomialGRPCClient{
+		client: pb.NewPolynomialServiceClient(conn),
+	}, nil
+}
 
-	var data pb.PolynomialFeaturesFitTransformRequest
+func polynomialFeaturesResponse(polynomialClient *polynomialGRPCClient) gin.HandlerFunc {
+	return func(c *gin.Context) {
 
-	err = json.Unmarshal(bodyAsByteArray, &data)
+		const event_name = "polynomial features"
 
-	if err != nil {
-		log.Fatalf("could not polynomial features: %v", err)
-		c.JSON(404, gin.H{"error": "missing parameter"})
-		return
+		var data pb.PolynomialFeaturesRequest
+		if err := readRequestData(c, &data); err != nil {
+			handleBadRequestError(c, err, http.StatusBadRequest, event_name)
+			return
+		}
+
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+		defer cancel()
+
+		response, err := polynomialClient.client.PolynomialFeaturesEvent(ctx, &data)
+
+		if err != nil {
+			handleGRPCError(c, err, event_name)
+			return
+		}
+
+		sendResponse(c, response, event_name)
+
 	}
-
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-	defer cancel()
-
-	r, err := polynomialClient.PolynomialFeaturesEvent(ctx, &pb.PolynomialFeaturesRequest{
-		XDropData:    data.XDropData,
-		YDropData:    data.YDropData,
-		Size:         data.Size,
-		Random:       data.Random,
-		Key:          data.Key,
-		SampleWeight: data.SampleWeight,
-		Degree:       data.Degree,
-		Instrument:   data.Instrument,
-	})
-
-	if err != nil {
-		log.Fatalf("could not polynomial features: %v", err)
-		c.JSON(500, gin.H{"error": "could not polynomial features"})
-		return
-	}
-
-	responseData, err := json.Marshal(r)
-
-	if err != nil {
-		log.Fatalf("response encoding polynomial features: %v", err)
-		c.JSON(505, gin.H{"error": "could not polynomial features"})
-		return
-	}
-
-	c.JSON(200, responseData)
 
 }
 
-func polynomialFeaturesFitTransformResponse(c *gin.Context) {
+func polynomialFeaturesFitTransformResponse(polynomialClient *polynomialGRPCClient) gin.HandlerFunc {
+	return func(c *gin.Context) {
 
-	bodyAsByteArray, err := io.ReadAll(c.Request.Body)
+		const event_name = "polynomial features fit transform"
 
-	if err != nil {
-		log.Fatalf("could not polynomial features fit transform: %v", err)
-		c.JSON(400, gin.H{"error": "Bad Request"})
-		return
+		var data pb.PolynomialFeaturesFitTransformRequest
+		if err := readRequestData(c, &data); err != nil {
+			handleBadRequestError(c, err, http.StatusBadRequest, event_name)
+			return
+		}
+
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+		defer cancel()
+
+		response, err := polynomialClient.client.PolynomialFeaturesFitTransformEvent(ctx, &data)
+
+		if err != nil {
+			handleGRPCError(c, err, event_name)
+			return
+		}
+
+		sendResponse(c, response, event_name)
 	}
-
-	var data pb.PolynomialFeaturesFitTransformRequest
-
-	err = json.Unmarshal(bodyAsByteArray, &data)
-
-	if err != nil {
-		log.Fatalf("could not polynomial features fit transform: %v", err)
-		c.JSON(404, gin.H{"error": "missing parameter"})
-		return
-	}
-
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-	defer cancel()
-
-	r, err := polynomialClient.PolynomialFeaturesFitTransformEvent(ctx, &pb.PolynomialFeaturesFitTransformRequest{
-		XDropData:    data.XDropData,
-		YDropData:    data.YDropData,
-		Size:         data.Size,
-		Random:       data.Random,
-		Key:          data.Key,
-		SampleWeight: data.SampleWeight,
-		Degree:       data.Degree,
-		Instrument:   data.Instrument,
-	})
-
-	if err != nil {
-		log.Fatalf("could not polynomial features fit transform: %v", err)
-		c.JSON(500, gin.H{"error": "could not polynomial features fit transform"})
-		return
-	}
-
-	responseData, err := json.Marshal(r)
-
-	if err != nil {
-		log.Fatalf("response encoding polynomial features fit transform: %v", err)
-		c.JSON(505, gin.H{"error": "could not polynomial features fit transform"})
-		return
-	}
-
-	c.JSON(200, responseData)
 
 }

@@ -2,133 +2,13 @@ service: quotes
 
 frameworkVersion: '3'
 
-custom:
-  wsgi:
-    app: app.app
-
 provider:
   name: aws
   runtime: nodejs18.x
 
 functions:
-  headAPI:
+  api:
     handler: index.handler
     events:
-      - http:
-          path: /api/head
-          method: GET
-  infoAPI:
-    handler: index.handler
-    events:
-      - http:
-          path: /api/info
-          method: GET
-  descibleAPI:
-    handler: index.handler
-    events:
-      - http:
-          path: /api/descible
-          method: GET  
-  linearSVCAPI:
-    handler: index.handler
-    events:
-      - http:
-          path: /api/linearSVC
-          method: POST
-  linearSVRAPI:
-    handler: index.handler
-    events:
-      - http:
-          path: /api/linearSVR
-          method: POST
-  svcAPI:
-    handler: index.handler
-    events:
-      - http:
-          path: /api/svc
-          method: POST
-  polynomialFeaturesAPI:
-    handler: index.handler
-    events:
-      - http:
-          path: /api/polynomialFeatures
-          method: POST
-  polynomialFeaturesFitTransformAPI:
-    handler: index.handler
-    events:
-      - http:
-          path: /api/polynomialFeaturesFitTransform
-          method: POST
-  nearestNeighborsAPI:
-    handler: index.handler
-    events:
-      - http:
-          path: /api/nearestNeighbors
-          method: POST
-  kdTreeAPI:
-    handler: index.handler
-    events:
-      - http:
-          path: /api/kdTree
-          method: POST
-  nearestCentroidAPI:
-    handler: index.handler
-    events:
-      - http:
-          path: /api/nearestCentroid
-          method: POST
-  linearRegressionAPI:
-    handler: index.handler
-    events:
-      - http:
-          path: /api/linearRegression
-          method: POST
-  ridgeAPI:
-    handler: index.handler
-    events:
-      - http:
-          path: /api/ridge
-          method: POST
-  ridgeCVAPI:
-    handler: index.handler
-    events:
-      - http:
-          path: /api/ridgeCV
-          method: POST
-  lassoAPI:
-    handler: index.handler
-    events:
-      - http:
-          path: /api/lasso
-          method: POST
-  lassoLarsAPI:
-    handler: index.handler
-    events:
-      - http:
-          path: /api/lassoLars
-          method: POST
-  bayesianRidgeAPI:
-    handler: index.handler
-    events:
-      - http:
-          path: /api/bayesianRidge
-          method: POST
-  tweedieRegressorAPI:
-    handler: index.handler
-    events:
-      - http:
-          path: /api/tweedieRegressor
-          method: POST
-  sgdClassifierAPI:
-    handler: index.handler
-    events:
-      - http:
-          path: /api/sgdClassifier
-          method: POST
-  elasticNetAPI:
-    handler: index.handler
-    events:
-      - http:
-          path: /api/elasticNet
-          method: POST
+      - httpApi: '*'
 

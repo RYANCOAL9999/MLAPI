@@ -39,7 +39,7 @@ class LinearService(object):
             response = self.__stub.LinearRegressionEvent(request_message)
             return asdict(response)
         
-    def ridgeRespone(
+    def ridgeResponse(
             self, 
             data
         )->dict:
@@ -56,7 +56,7 @@ class LinearService(object):
             response = self.__stub.LinearRidgeEvent(request_message)
             return asdict(response)
         
-    def ridgeCVReponse(
+    def ridgeCVResponse(
             self, 
             data
         )->dict:
@@ -73,7 +73,7 @@ class LinearService(object):
             response = self.__stub.LinearRidgeCVEvent(request_message)
             return asdict(response)
         
-    def lassoReponse(
+    def lassoResponse(
             self, 
             data
         )->dict:
@@ -91,7 +91,7 @@ class LinearService(object):
             response = self.__stub.LassoExpressionEvent(request_message)
             return asdict(response)
         
-    def lassoLarsReponse(
+    def lassoLarsResponse(
             self, 
             data
         )->dict:
@@ -161,7 +161,7 @@ class LinearService(object):
             response = self.__stub.SGDClassifierEvent(request_message)
             return asdict(response)
         
-    def elasticNetReponse(
+    def elasticNetResponse(
             self, 
             data
         )->dict:

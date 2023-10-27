@@ -2,10 +2,7 @@ package main
 
 import (
 	"context"
-	"encoding/json"
-	"flag"
-	"io"
-	"log"
+	"net/http"
 	"time"
 
 	pb "github.com/RYANCOAL9999/AI_Go_Proto_File"
@@ -14,167 +11,97 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-var neighborsAddr = flag.String("addr", "localhost:50052", "the address to connect to")
-
-var neighborsClient pb.NeighborsServiceClient
-
-func init() {
-	conn, err := grpc.Dial(*neighborsAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
-	if err != nil {
-		log.Fatalf("Could not connect to gRPC server: %v", err)
-	}
-	neighborsClient = pb.NewNeighborsServiceClient(conn)
+type neighborsGPRCClient struct {
+	client pb.NeighborsServiceClient
 }
 
-func nearestNeighborsRespone(c *gin.Context) {
-
-	bodyAsByteArray, err := io.ReadAll(c.Request.Body)
-
+func newNeighborsGPRCClient(addr string) (*neighborsGPRCClient, error) {
+	conn, err := grpc.Dial(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		log.Fatalf("could not nearest neighbors: %v", err)
-		c.JSON(400, gin.H{"error": "Bad Request"})
-		return
+		return nil, err
 	}
+	return &neighborsGPRCClient{
+		client: pb.NewNeighborsServiceClient(conn),
+	}, nil
+}
 
-	var data pb.NearestNeighborsRequest
+func nearestNeighborsResponse(neighborsClient *neighborsGPRCClient) gin.HandlerFunc {
+	return func(c *gin.Context) {
 
-	err = json.Unmarshal(bodyAsByteArray, &data)
+		const event_name = "nearest neighbors"
 
-	if err != nil {
-		log.Fatalf("could not nearest neighbors: %v", err)
-		c.JSON(404, gin.H{"error": "missing parameter"})
-		return
+		var data pb.NearestNeighborsRequest
+		if err := readRequestData(c, &data); err != nil {
+			handleBadRequestError(c, err, http.StatusBadRequest, event_name)
+			return
+		}
+
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+		defer cancel()
+
+		response, err := neighborsClient.client.NearestNeighborsEvent(ctx, &data)
+
+		if err != nil {
+			handleGRPCError(c, err, event_name)
+			return
+		}
+
+		sendResponse(c, response, event_name)
+
 	}
-
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-	defer cancel()
-
-	r, err := neighborsClient.NearestNeighborsEvent(ctx, &pb.NearestNeighborsRequest{
-		XDropData: data.XDropData,
-		YDropData: data.YDropData,
-		Size:      data.Size,
-		Random:    data.Random,
-		Key:       data.Key,
-		Kwargs:    data.Kwargs,
-	})
-
-	if err != nil {
-		log.Fatalf("could not nearest neighbors: %v", err)
-		c.JSON(500, gin.H{"error": "could not nearest neighbors"})
-		return
-	}
-
-	responseData, err := json.Marshal(r)
-
-	if err != nil {
-		log.Fatalf("response encoding nearest neighbors: %v", err)
-		c.JSON(505, gin.H{"error": "could not nearest neighbors"})
-		return
-	}
-
-	c.JSON(200, responseData)
 
 }
 
-func kdTreeResponse(c *gin.Context) {
+func kdTreeResponse(neighborsClient *neighborsGPRCClient) gin.HandlerFunc {
+	return func(c *gin.Context) {
 
-	bodyAsByteArray, err := io.ReadAll(c.Request.Body)
+		const event_name = "kd tree"
 
-	if err != nil {
-		log.Fatalf("could not kd tree: %v", err)
-		c.JSON(400, gin.H{"error": "Bad Request"})
-		return
+		var data pb.KDTreeRequest
+		if err := readRequestData(c, &data); err != nil {
+			handleBadRequestError(c, err, http.StatusBadRequest, event_name)
+			return
+		}
+
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+		defer cancel()
+
+		response, err := neighborsClient.client.KDTreeEvent(ctx, &data)
+
+		if err != nil {
+			handleGRPCError(c, err, event_name)
+			return
+		}
+
+		sendResponse(c, response, event_name)
+
 	}
-
-	var data pb.KDTreeRequest
-
-	err = json.Unmarshal(bodyAsByteArray, &data)
-
-	if err != nil {
-		log.Fatalf("could not kd tree: %v", err)
-		c.JSON(404, gin.H{"error": "missing parameter"})
-		return
-	}
-
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-	defer cancel()
-
-	r, err := neighborsClient.KDTreeEvent(ctx, &pb.KDTreeRequest{
-		XDropData:    data.XDropData,
-		YDropData:    data.YDropData,
-		Size:         data.Size,
-		Random:       data.Random,
-		Key:          data.Key,
-		SampleWeight: data.SampleWeight,
-		K:            data.K,
-		Instrument:   data.Instrument,
-	})
-
-	if err != nil {
-		log.Fatalf("could not kd tree: %v", err)
-		c.JSON(500, gin.H{"error": "could not kd Tree"})
-		return
-	}
-
-	responseData, err := json.Marshal(r)
-
-	if err != nil {
-		log.Fatalf("response encoding kd tree: %v", err)
-		c.JSON(505, gin.H{"error": "could not kd tree"})
-		return
-	}
-
-	c.JSON(200, responseData)
 
 }
 
-func nearestCentroidResponse(c *gin.Context) {
+func nearestCentroidResponse(neighborsClient *neighborsGPRCClient) gin.HandlerFunc {
+	return func(c *gin.Context) {
 
-	bodyAsByteArray, err := io.ReadAll(c.Request.Body)
+		const event_name = "nearest centroid"
 
-	if err != nil {
-		log.Fatalf("could not nearest centroid: %v", err)
-		c.JSON(400, gin.H{"error": "Bad Request"})
-		return
+		var data pb.NearestCentroidRequest
+		if err := readRequestData(c, &data); err != nil {
+			handleBadRequestError(c, err, http.StatusBadRequest, event_name)
+			return
+		}
+
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+		defer cancel()
+
+		response, err := neighborsClient.client.NearestCentroidEvent(ctx, &data)
+
+		if err != nil {
+			handleGRPCError(c, err, event_name)
+			return
+		}
+
+		sendResponse(c, response, event_name)
+
 	}
-
-	var data pb.NearestCentroidRequest
-
-	err = json.Unmarshal(bodyAsByteArray, &data)
-
-	if err != nil {
-		log.Fatalf("could not nearest centroid: %v", err)
-		c.JSON(404, gin.H{"error": "missing parameter"})
-		return
-	}
-
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-	defer cancel()
-
-	r, err := neighborsClient.NearestCentroidEvent(ctx, &pb.NearestCentroidRequest{
-		XDropData:       data.XDropData,
-		YDropData:       data.YDropData,
-		Size:            data.Size,
-		Random:          data.Random,
-		Key:             data.Key,
-		Metric:          data.Metric,
-		ShrinkThreshold: data.ShrinkThreshold,
-	})
-
-	if err != nil {
-		log.Fatalf("could not nearest centroid: %v", err)
-		c.JSON(500, gin.H{"error": "could not nearest centroid"})
-		return
-	}
-
-	responseData, err := json.Marshal(r)
-
-	if err != nil {
-		log.Fatalf("response encoding nearest centroid: %v", err)
-		c.JSON(505, gin.H{"error": "could not nearest centroid"})
-		return
-	}
-
-	c.JSON(200, responseData)
 
 }

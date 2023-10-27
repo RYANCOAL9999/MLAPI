@@ -13,7 +13,7 @@ class NeighborsService(object):
         self.__channel = grpc.insecure_channel(url)
         self.__stub = NeighborsServiceStub(self.__channel)
 
-    def nearestNeighborsRespone(
+    def nearestNeighborsResponse(
             self, 
             data
         )->dict:

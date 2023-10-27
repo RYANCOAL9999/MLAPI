@@ -18,45 +18,75 @@ func init() {
 
 	r := gin.Default()
 
-	r.GET("/api/head", headerResponse)
+	generalClient, err := newGeneralGRPCClient("localhost:50051")
+	if err != nil {
+		log.Fatalf(err.Error())
+		return
+	}
 
-	r.GET("/api/info", infoResponse)
+	linearClient, err := newLinearGRPCClient("localhost:50051")
+	if err != nil {
+		log.Fatalf(err.Error())
+		return
+	}
 
-	r.GET("/api/descible", describleResponse)
+	neighborsClient, err := newNeighborsGPRCClient("localhost:50052")
+	if err != nil {
+		log.Fatalf(err.Error())
+		return
+	}
 
-	r.POST("/api/linearSVC", linearSVCResponse)
+	polynomialClient, err := newPolynomialGRPCClient("localhost:50053")
+	if err != nil {
+		log.Fatalf(err.Error())
+		return
+	}
 
-	r.POST("/api/linearSVR", linearSVRResponse)
+	svmClient, err := newSVMGRPCClient("localhost:50054")
+	if err != nil {
+		log.Fatalf(err.Error())
+		return
+	}
 
-	r.POST("/api/svc", svcResponse)
+	r.GET("/api/head", headerResponse(generalClient))
 
-	r.POST("/api/polynomialFeatures", polynomialFeaturesResponse)
+	r.GET("/api/info", infoResponse(generalClient))
 
-	r.POST("/api/polynomialFeaturesFitTransform", polynomialFeaturesFitTransformResponse)
+	r.GET("/api/descible", describleResponse(generalClient))
 
-	r.POST("/api/nearestNeighbors", nearestNeighborsRespone)
+	r.POST("/api/linearSVC", linearSVCResponse(svmClient))
 
-	r.POST("/api/kdTree", kdTreeResponse)
+	r.POST("/api/linearSVR", linearSVRResponse(svmClient))
 
-	r.POST("/api/nearestCentroid", nearestCentroidResponse)
+	r.POST("/api/svc", svcResponse(svmClient))
 
-	r.POST("/api/linearRegression", linearRegressionResponse)
+	r.POST("/api/polynomialFeatures", polynomialFeaturesResponse(polynomialClient))
 
-	r.POST("/api/ridge", ridgeRespone)
+	r.POST("/api/polynomialFeaturesFitTransform", polynomialFeaturesFitTransformResponse(polynomialClient))
 
-	r.POST("/api/ridgeCV", ridgeCVReponse)
+	r.POST("/api/nearestNeighbors", nearestNeighborsResponse(neighborsClient))
 
-	r.POST("/api/lasso", lassoReponse)
+	r.POST("/api/kdTree", kdTreeResponse(neighborsClient))
 
-	r.POST("/api/lassoLars", lassoLarsReponse)
+	r.POST("/api/nearestCentroid", nearestCentroidResponse(neighborsClient))
 
-	r.POST("/api/bayesianRidge", bayesianRidgeResponse)
+	r.POST("/api/linearRegression", linearRegressionResponse(linearClient))
 
-	r.POST("/api/tweedieRegressor", tweedieRegressorResponse)
+	r.POST("/api/ridge", ridgeResponse(linearClient))
 
-	r.POST("/api/sgdClassifier", sgdClassifierResponse)
+	r.POST("/api/ridgeCV", ridgeCVResponse(linearClient))
 
-	r.POST("/api/elasticNet", elasticNetResponse)
+	r.POST("/api/lasso", lassoResponse(linearClient))
+
+	r.POST("/api/lassoLars", lassoLarsResponse(linearClient))
+
+	r.POST("/api/bayesianRidge", bayesianRidgeResponse(linearClient))
+
+	r.POST("/api/tweedieRegressor", tweedieRegressorResponse(linearClient))
+
+	r.POST("/api/sgdClassifier", sgdClassifierResponse(linearClient))
+
+	r.POST("/api/elasticNet", elasticNetResponse(linearClient))
 
 	ginLambda = ginadapter.New(r)
 
