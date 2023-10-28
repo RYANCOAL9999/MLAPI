@@ -25,7 +25,7 @@ export const polynomialFeaturesResponse = (req, res, stub) => {
     const request_message = req.body;
 
     if (request_message) {
-        sendStubRequest(stub, `PolynomialFeaturesEvent`)
+        sendStubRequest(stub, `PolynomialFeaturesEvent`, request_message)
         .then((response) => handleResponse(response, res))
         .catch((err) => handleGRPCError(err, res, event_name));
     }
@@ -41,7 +41,7 @@ export const polynomialFeaturesFitTransformResponse = (req, res, stub) => {
     const request_message = req.body;
 
     if (request_message) {
-        sendStubRequest(stub, `PolynomialFeaturesFitTransformEvent`)
+        sendStubRequest(stub, `PolynomialFeaturesFitTransformEvent`, request_message)
         .then((response) => handleResponse(response, res))
         .catch((err) => handleGRPCError(err, res, event_name));
     }

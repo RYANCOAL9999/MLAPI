@@ -10,28 +10,28 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-type neighborsGPRCClient struct {
+type NeighborsGPRCClient struct {
 	client pb.NeighborsServiceClient
 }
 
-func newNeighborsGPRCClient(addr string) (*neighborsGPRCClient, error) {
+func NewNeighborsGPRCClient(addr string) (*NeighborsGPRCClient, error) {
 	conn, err := grpc.Dial(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return nil, err
 	}
-	return &neighborsGPRCClient{
+	return &NeighborsGPRCClient{
 		client: pb.NewNeighborsServiceClient(conn),
 	}, nil
 }
 
-func nearestNeighborsResponse(neighborsClient *neighborsGPRCClient) gin.HandlerFunc {
+func NearestNeighborsResponse(neighborsClient *NeighborsGPRCClient) gin.HandlerFunc {
 	return func(c *gin.Context) {
 
 		const event_name = "nearest neighbors"
 
 		var data pb.NearestNeighborsRequest
-		if err := readRequestData(c, &data); err != nil {
-			handleBadRequestError(c, err, event_name)
+		if err := ReadRequestData(c, &data); err != nil {
+			HandleBadRequestError(c, err, event_name)
 			return
 		}
 
@@ -41,24 +41,24 @@ func nearestNeighborsResponse(neighborsClient *neighborsGPRCClient) gin.HandlerF
 		response, err := neighborsClient.client.NearestNeighborsEvent(ctx, &data)
 
 		if err != nil {
-			handleGRPCError(c, err, event_name)
+			HandleGRPCError(c, err, event_name)
 			return
 		}
 
-		sendResponse(c, response, event_name)
+		SendResponse(c, response, event_name)
 
 	}
 
 }
 
-func kdTreeResponse(neighborsClient *neighborsGPRCClient) gin.HandlerFunc {
+func KDTreeResponse(neighborsClient *NeighborsGPRCClient) gin.HandlerFunc {
 	return func(c *gin.Context) {
 
 		const event_name = "kd tree"
 
 		var data pb.KDTreeRequest
-		if err := readRequestData(c, &data); err != nil {
-			handleBadRequestError(c, err, event_name)
+		if err := ReadRequestData(c, &data); err != nil {
+			HandleBadRequestError(c, err, event_name)
 			return
 		}
 
@@ -68,24 +68,24 @@ func kdTreeResponse(neighborsClient *neighborsGPRCClient) gin.HandlerFunc {
 		response, err := neighborsClient.client.KDTreeEvent(ctx, &data)
 
 		if err != nil {
-			handleGRPCError(c, err, event_name)
+			HandleGRPCError(c, err, event_name)
 			return
 		}
 
-		sendResponse(c, response, event_name)
+		SendResponse(c, response, event_name)
 
 	}
 
 }
 
-func nearestCentroidResponse(neighborsClient *neighborsGPRCClient) gin.HandlerFunc {
+func NearestCentroidResponse(neighborsClient *NeighborsGPRCClient) gin.HandlerFunc {
 	return func(c *gin.Context) {
 
 		const event_name = "nearest centroid"
 
 		var data pb.NearestCentroidRequest
-		if err := readRequestData(c, &data); err != nil {
-			handleBadRequestError(c, err, event_name)
+		if err := ReadRequestData(c, &data); err != nil {
+			HandleBadRequestError(c, err, event_name)
 			return
 		}
 
@@ -95,11 +95,11 @@ func nearestCentroidResponse(neighborsClient *neighborsGPRCClient) gin.HandlerFu
 		response, err := neighborsClient.client.NearestCentroidEvent(ctx, &data)
 
 		if err != nil {
-			handleGRPCError(c, err, event_name)
+			HandleGRPCError(c, err, event_name)
 			return
 		}
 
-		sendResponse(c, response, event_name)
+		SendResponse(c, response, event_name)
 
 	}
 

@@ -10,28 +10,28 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-type svmGRPCClient struct {
+type SVMGRPCClient struct {
 	client pb.SVMServiceClient
 }
 
-func newSVMGRPCClient(addr string) (*svmGRPCClient, error) {
+func NewSVMGRPCClient(addr string) (*SVMGRPCClient, error) {
 	conn, err := grpc.Dial(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return nil, err
 	}
-	return &svmGRPCClient{
+	return &SVMGRPCClient{
 		client: pb.NewSVMServiceClient(conn),
 	}, nil
 }
 
-func linearSVCResponse(svmClient *svmGRPCClient) gin.HandlerFunc {
+func LinearSVCResponse(svmClient *SVMGRPCClient) gin.HandlerFunc {
 	return func(c *gin.Context) {
 
 		const event_name = "linear svc"
 
 		var data pb.LinearRequest
-		if err := readRequestData(c, &data); err != nil {
-			handleBadRequestError(c, err, event_name)
+		if err := ReadRequestData(c, &data); err != nil {
+			HandleBadRequestError(c, err, event_name)
 			return
 		}
 
@@ -40,22 +40,22 @@ func linearSVCResponse(svmClient *svmGRPCClient) gin.HandlerFunc {
 
 		response, err := svmClient.client.LinearSVCEvent(ctx, &data)
 		if err != nil {
-			handleGRPCError(c, err, event_name)
+			HandleGRPCError(c, err, event_name)
 			return
 		}
 
-		sendResponse(c, response, event_name)
+		SendResponse(c, response, event_name)
 	}
 }
 
-func linearSVRResponse(svmClient *svmGRPCClient) gin.HandlerFunc {
+func LinearSVRResponse(svmClient *SVMGRPCClient) gin.HandlerFunc {
 	return func(c *gin.Context) {
 
 		const event_name = "linear svr"
 
 		var data pb.LinearRequest
-		if err := readRequestData(c, &data); err != nil {
-			handleBadRequestError(c, err, event_name)
+		if err := ReadRequestData(c, &data); err != nil {
+			HandleBadRequestError(c, err, event_name)
 			return
 		}
 
@@ -64,22 +64,22 @@ func linearSVRResponse(svmClient *svmGRPCClient) gin.HandlerFunc {
 
 		response, err := svmClient.client.LinearSVREvent(ctx, &data)
 		if err != nil {
-			handleGRPCError(c, err, event_name)
+			HandleGRPCError(c, err, event_name)
 			return
 		}
 
-		sendResponse(c, response, event_name)
+		SendResponse(c, response, event_name)
 	}
 }
 
-func svcResponse(svmClient *svmGRPCClient) gin.HandlerFunc {
+func SVCResponse(svmClient *SVMGRPCClient) gin.HandlerFunc {
 	return func(c *gin.Context) {
 
 		const event_name = "svc"
 
 		var data pb.SVCRequest
-		if err := readRequestData(c, &data); err != nil {
-			handleBadRequestError(c, err, event_name)
+		if err := ReadRequestData(c, &data); err != nil {
+			HandleBadRequestError(c, err, event_name)
 			return
 		}
 
@@ -88,10 +88,10 @@ func svcResponse(svmClient *svmGRPCClient) gin.HandlerFunc {
 
 		response, err := svmClient.client.SVCEvent(ctx, &data)
 		if err != nil {
-			handleGRPCError(c, err, event_name)
+			HandleGRPCError(c, err, event_name)
 			return
 		}
 
-		sendResponse(c, response, event_name)
+		SendResponse(c, response, event_name)
 	}
 }
