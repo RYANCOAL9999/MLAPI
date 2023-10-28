@@ -1,4 +1,4 @@
-package main
+package model
 
 import (
 	"context"
@@ -10,26 +10,26 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-type svmGRPCClient struct {
-	client pb.SVMServiceClient
+type neighborsGPRCClient struct {
+	client pb.NeighborsServiceClient
 }
 
-func newSVMGRPCClient(addr string) (*svmGRPCClient, error) {
+func newNeighborsGPRCClient(addr string) (*neighborsGPRCClient, error) {
 	conn, err := grpc.Dial(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return nil, err
 	}
-	return &svmGRPCClient{
-		client: pb.NewSVMServiceClient(conn),
+	return &neighborsGPRCClient{
+		client: pb.NewNeighborsServiceClient(conn),
 	}, nil
 }
 
-func linearSVCResponse(svmClient *svmGRPCClient) gin.HandlerFunc {
+func nearestNeighborsResponse(neighborsClient *neighborsGPRCClient) gin.HandlerFunc {
 	return func(c *gin.Context) {
 
-		const event_name = "linear svc"
+		const event_name = "nearest neighbors"
 
-		var data pb.LinearRequest
+		var data pb.NearestNeighborsRequest
 		if err := readRequestData(c, &data); err != nil {
 			handleBadRequestError(c, err, event_name)
 			return
@@ -38,22 +38,25 @@ func linearSVCResponse(svmClient *svmGRPCClient) gin.HandlerFunc {
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 		defer cancel()
 
-		response, err := svmClient.client.LinearSVCEvent(ctx, &data)
+		response, err := neighborsClient.client.NearestNeighborsEvent(ctx, &data)
+
 		if err != nil {
 			handleGRPCError(c, err, event_name)
 			return
 		}
 
 		sendResponse(c, response, event_name)
+
 	}
+
 }
 
-func linearSVRResponse(svmClient *svmGRPCClient) gin.HandlerFunc {
+func kdTreeResponse(neighborsClient *neighborsGPRCClient) gin.HandlerFunc {
 	return func(c *gin.Context) {
 
-		const event_name = "linear svr"
+		const event_name = "kd tree"
 
-		var data pb.LinearRequest
+		var data pb.KDTreeRequest
 		if err := readRequestData(c, &data); err != nil {
 			handleBadRequestError(c, err, event_name)
 			return
@@ -62,22 +65,25 @@ func linearSVRResponse(svmClient *svmGRPCClient) gin.HandlerFunc {
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 		defer cancel()
 
-		response, err := svmClient.client.LinearSVREvent(ctx, &data)
+		response, err := neighborsClient.client.KDTreeEvent(ctx, &data)
+
 		if err != nil {
 			handleGRPCError(c, err, event_name)
 			return
 		}
 
 		sendResponse(c, response, event_name)
+
 	}
+
 }
 
-func svcResponse(svmClient *svmGRPCClient) gin.HandlerFunc {
+func nearestCentroidResponse(neighborsClient *neighborsGPRCClient) gin.HandlerFunc {
 	return func(c *gin.Context) {
 
-		const event_name = "svc"
+		const event_name = "nearest centroid"
 
-		var data pb.SVCRequest
+		var data pb.NearestCentroidRequest
 		if err := readRequestData(c, &data); err != nil {
 			handleBadRequestError(c, err, event_name)
 			return
@@ -86,12 +92,15 @@ func svcResponse(svmClient *svmGRPCClient) gin.HandlerFunc {
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 		defer cancel()
 
-		response, err := svmClient.client.SVCEvent(ctx, &data)
+		response, err := neighborsClient.client.NearestCentroidEvent(ctx, &data)
+
 		if err != nil {
 			handleGRPCError(c, err, event_name)
 			return
 		}
 
 		sendResponse(c, response, event_name)
+
 	}
+
 }
