@@ -25,7 +25,7 @@ export const nearestNeighborsResponse = (req, res, stub) => {
     const request_message = req.body;
 
     if(request_message){
-        sendStubRequest(stub, `NearestNeighborsEvent`)
+        sendStubRequest(stub, `NearestNeighborsEvent`, request_message)
         .then((response) => handleResponse(response, res))
         .catch((err) => handleGRPCError(err, res, event_name));
     }
@@ -41,7 +41,7 @@ export const kdTreeResponse = (req, res, stub) => {
     const request_message = req.body;
 
     if(request_message){
-        sendStubRequest(stub, `KDTreeEvent`)
+        sendStubRequest(stub, `KDTreeEvent`, request_message)
         .then((response) => handleResponse(response, res))
         .catch((err) => handleGRPCError(err, res, event_name));
     }
@@ -57,7 +57,7 @@ export const nearestCentroidResponse = (req, res, stub) => {
     const request_message = req.body;
 
     if(request_message){
-        sendStubRequest(stub, `NearestCentroidEvent`)
+        sendStubRequest(stub, `NearestCentroidEvent`, request_message)
         .then((response) => handleResponse(response, res))
         .catch((err) => handleGRPCError(err, res, event_name));
     }

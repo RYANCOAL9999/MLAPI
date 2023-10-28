@@ -25,7 +25,7 @@ export const linearRegressionResponse = (req, res, stub) => {
     const request_message = req.body; 
 
     if(request_message){
-        sendStubRequest(stub, `LinearRegressionEvent`)
+        sendStubRequest(stub, `LinearRegressionEvent`, request_message)
         .then((response) => handleResponse(response, res))
         .catch((err) => handleGRPCError(err, res, event_name));
     }
@@ -41,7 +41,7 @@ export const ridgeResponse = (req, res, stub) => {
     const request_message = req.body; 
 
     if(request_message){
-        sendStubRequest(stub, `LinearRidgeEvent`)
+        sendStubRequest(stub, `LinearRidgeEvent`, request_message)
         .then((response) => handleResponse(response, res))
         .catch((err) => handleGRPCError(err, res, event_name));
     }
@@ -57,7 +57,7 @@ export const ridgeCVResponse = (req, res, stub) => {
     const request_message = req.body; 
 
     if(request_message){
-        sendStubRequest(stub, `LinearRidgeCVEvent`)
+        sendStubRequest(stub, `LinearRidgeCVEvent`, request_message)
         .then((response) => handleResponse(response, res))
         .catch((err) => handleGRPCError(err, res, event_name));
     }
@@ -73,7 +73,7 @@ export const lassoResponse = (req, res, stub) => {
     const request_message = req.body; 
 
     if(request_message){
-        sendStubRequest(stub, `LassoExpressionEvent`)
+        sendStubRequest(stub, `LassoExpressionEvent`, request_message)
         .then((response) => handleResponse(response, res))
         .catch((err) => handleGRPCError(err, res, event_name));
     }
@@ -89,7 +89,7 @@ export const lassoLarsResponse = (req, res, stub) => {
     const request_message = req.body; 
 
     if(request_message){
-        sendStubRequest(stub, `LassoLarsLassoExpressionEvent`)
+        sendStubRequest(stub, `LassoLarsLassoExpressionEvent`, request_message)
         .then((response) => handleResponse(response, res))
         .catch((err) => handleGRPCError(err, res, event_name));
     }
@@ -105,7 +105,7 @@ export const bayesianRidgeResponse = (req, res, stub) => {
     const request_message = req.body; 
 
     if(request_message){
-        sendStubRequest(stub, `BayesianRidgeEvent`)
+        sendStubRequest(stub, `BayesianRidgeEvent`, request_message)
         .then((response) => handleResponse(response, res))
         .catch((err) => handleGRPCError(err, res, event_name));
     }
@@ -121,7 +121,7 @@ export const tweedieRegressorResponse = (req, res, stub) => {
     const request_message = req.body; 
 
     if(request_message){
-        sendStubRequest(stub, `TweedieRegressorEvent`)
+        sendStubRequest(stub, `TweedieRegressorEvent`, request_message)
         .then((response) => handleResponse(response, res))
         .catch((err) => handleGRPCError(err, res, event_name));
     }
@@ -137,7 +137,7 @@ export const sgdClassifierResponse = (req, res, stub) => {
     const request_message = req.body; 
 
     if(request_message){
-        sendStubRequest(stub, `SGDClassifierEvent`)
+        sendStubRequest(stub, `SGDClassifierEvent`, request_message)
         .then((response) => handleResponse(response, res))
         .catch((err) => handleGRPCError(err, res, event_name));
     }
@@ -153,7 +153,7 @@ export const elasticNetResponse = (req, res, stub) => {
     const request_message = req.body; 
 
     if(request_message){
-        sendStubRequest(stub, `ElasticNetEvent`)
+        sendStubRequest(stub, `ElasticNetEvent`, request_message)
         .then((response) => handleResponse(response, res))
         .catch((err) => handleGRPCError(err, res, event_name));
     }
