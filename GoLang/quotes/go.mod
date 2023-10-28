@@ -1,4 +1,4 @@
-module github.com/RYANCOAL9999/MLAPI/GoLang/quotes
+module quotes
 
 go 1.21.3
 
