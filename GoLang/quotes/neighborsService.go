@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"net/http"
 	"time"
 
 	pb "github.com/RYANCOAL9999/AI_Go_Proto_File"
@@ -32,7 +31,7 @@ func nearestNeighborsResponse(neighborsClient *neighborsGPRCClient) gin.HandlerF
 
 		var data pb.NearestNeighborsRequest
 		if err := readRequestData(c, &data); err != nil {
-			handleBadRequestError(c, err, http.StatusBadRequest, event_name)
+			handleBadRequestError(c, err, event_name)
 			return
 		}
 
@@ -59,7 +58,7 @@ func kdTreeResponse(neighborsClient *neighborsGPRCClient) gin.HandlerFunc {
 
 		var data pb.KDTreeRequest
 		if err := readRequestData(c, &data); err != nil {
-			handleBadRequestError(c, err, http.StatusBadRequest, event_name)
+			handleBadRequestError(c, err, event_name)
 			return
 		}
 
@@ -86,7 +85,7 @@ func nearestCentroidResponse(neighborsClient *neighborsGPRCClient) gin.HandlerFu
 
 		var data pb.NearestCentroidRequest
 		if err := readRequestData(c, &data); err != nil {
-			handleBadRequestError(c, err, http.StatusBadRequest, event_name)
+			handleBadRequestError(c, err, event_name)
 			return
 		}
 

@@ -45,7 +45,7 @@ func infoResponse(generalClient *generalGRPCClient) gin.HandlerFunc {
 
 }
 
-func describleResponse(generalGRPCClient *generalGRPCClient) gin.HandlerFunc {
+func describlerResponse(generalGRPCClient *generalGRPCClient) gin.HandlerFunc {
 	return func(c *gin.Context) {
 
 		const event_name = "describle"
@@ -66,10 +66,10 @@ func describleResponse(generalGRPCClient *generalGRPCClient) gin.HandlerFunc {
 
 }
 
-func headResponse(generalGRPCClient *generalGRPCClient) gin.HandlerFunc {
+func headerResponse(generalGRPCClient *generalGRPCClient) gin.HandlerFunc {
 	return func(c *gin.Context) {
 
-		const event_name = "header"
+		const event_name = "head"
 
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 		defer cancel()

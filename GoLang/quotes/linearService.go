@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"net/http"
 	"time"
 
 	pb "github.com/RYANCOAL9999/AI_Go_Proto_File"
@@ -32,7 +31,7 @@ func linearRegressionResponse(linearClient *linearGRPCClient) gin.HandlerFunc {
 
 		var data pb.LinearRegressionRequest
 		if err := readRequestData(c, &data); err != nil {
-			handleBadRequestError(c, err, http.StatusBadRequest, event_name)
+			handleBadRequestError(c, err, event_name)
 			return
 		}
 
@@ -58,7 +57,7 @@ func ridgeResponse(linearClient *linearGRPCClient) gin.HandlerFunc {
 
 		var data pb.LinearRidgeRequest
 		if err := readRequestData(c, &data); err != nil {
-			handleBadRequestError(c, err, http.StatusBadRequest, event_name)
+			handleBadRequestError(c, err, event_name)
 			return
 		}
 
@@ -84,7 +83,7 @@ func ridgeCVResponse(linearClient *linearGRPCClient) gin.HandlerFunc {
 
 		var data pb.LinearRidgeCVRequest
 		if err := readRequestData(c, &data); err != nil {
-			handleBadRequestError(c, err, http.StatusBadRequest, event_name)
+			handleBadRequestError(c, err, event_name)
 			return
 		}
 
@@ -111,7 +110,7 @@ func lassoResponse(linearClient *linearGRPCClient) gin.HandlerFunc {
 
 		var data pb.LassoExpressionRequest
 		if err := readRequestData(c, &data); err != nil {
-			handleBadRequestError(c, err, http.StatusBadRequest, event_name)
+			handleBadRequestError(c, err, event_name)
 			return
 		}
 
@@ -137,7 +136,7 @@ func lassoLarsResponse(linearClient *linearGRPCClient) gin.HandlerFunc {
 
 		var data pb.LassoLarsLassoExpressionRequest
 		if err := readRequestData(c, &data); err != nil {
-			handleBadRequestError(c, err, http.StatusBadRequest, event_name)
+			handleBadRequestError(c, err, event_name)
 			return
 		}
 
@@ -164,7 +163,7 @@ func bayesianRidgeResponse(linearClient *linearGRPCClient) gin.HandlerFunc {
 
 		var data pb.BayesianRidgeRequest
 		if err := readRequestData(c, &data); err != nil {
-			handleBadRequestError(c, err, http.StatusBadRequest, event_name)
+			handleBadRequestError(c, err, event_name)
 			return
 		}
 
@@ -191,7 +190,7 @@ func tweedieRegressorResponse(linearClient *linearGRPCClient) gin.HandlerFunc {
 
 		var data pb.TweedieRegressorRequest
 		if err := readRequestData(c, &data); err != nil {
-			handleBadRequestError(c, err, http.StatusBadRequest, event_name)
+			handleBadRequestError(c, err, event_name)
 			return
 		}
 
@@ -218,7 +217,7 @@ func sgdClassifierResponse(linearClient *linearGRPCClient) gin.HandlerFunc {
 
 		var data pb.SGDClassifierRequest
 		if err := readRequestData(c, &data); err != nil {
-			handleBadRequestError(c, err, http.StatusBadRequest, event_name)
+			handleBadRequestError(c, err, event_name)
 			return
 		}
 
@@ -245,7 +244,7 @@ func elasticNetResponse(linearClient *linearGRPCClient) gin.HandlerFunc {
 
 		var data pb.ElasticNetRequest
 		if err := readRequestData(c, &data); err != nil {
-			handleBadRequestError(c, err, http.StatusBadRequest, event_name)
+			handleBadRequestError(c, err, event_name)
 			return
 		}
 

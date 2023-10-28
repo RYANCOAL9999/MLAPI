@@ -57,7 +57,7 @@ def info()->Response:
 def describle()->Response: 
     return make_response(
         jsonify(
-            generalService.describleResponse(
+            generalService.describlerResponse(
 
             )
         ),

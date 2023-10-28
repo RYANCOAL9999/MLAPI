@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"net/http"
 	"time"
 
 	pb "github.com/RYANCOAL9999/AI_Go_Proto_File"
@@ -32,7 +31,7 @@ func linearSVCResponse(svmClient *svmGRPCClient) gin.HandlerFunc {
 
 		var data pb.LinearRequest
 		if err := readRequestData(c, &data); err != nil {
-			handleBadRequestError(c, err, http.StatusBadRequest, event_name)
+			handleBadRequestError(c, err, event_name)
 			return
 		}
 
@@ -56,7 +55,7 @@ func linearSVRResponse(svmClient *svmGRPCClient) gin.HandlerFunc {
 
 		var data pb.LinearRequest
 		if err := readRequestData(c, &data); err != nil {
-			handleBadRequestError(c, err, http.StatusBadRequest, event_name)
+			handleBadRequestError(c, err, event_name)
 			return
 		}
 
@@ -80,7 +79,7 @@ func svcResponse(svmClient *svmGRPCClient) gin.HandlerFunc {
 
 		var data pb.SVCRequest
 		if err := readRequestData(c, &data); err != nil {
-			handleBadRequestError(c, err, http.StatusBadRequest, event_name)
+			handleBadRequestError(c, err, event_name)
 			return
 		}
 

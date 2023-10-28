@@ -48,11 +48,11 @@ func init() {
 		return
 	}
 
-	r.GET("/api/head", headResponse(generalClient))
+	r.GET("/api/head", headerResponse(generalClient))
 
 	r.GET("/api/info", infoResponse(generalClient))
 
-	r.GET("/api/descible", describleResponse(generalClient))
+	r.GET("/api/descible", describlerResponse(generalClient))
 
 	r.POST("/api/linearSVC", linearSVCResponse(svmClient))
 

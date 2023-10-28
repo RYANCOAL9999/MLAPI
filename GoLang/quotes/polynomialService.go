@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"net/http"
 	"time"
 
 	pb "github.com/RYANCOAL9999/AI_Go_Proto_File"
@@ -32,7 +31,7 @@ func polynomialFeaturesResponse(polynomialClient *polynomialGRPCClient) gin.Hand
 
 		var data pb.PolynomialFeaturesRequest
 		if err := readRequestData(c, &data); err != nil {
-			handleBadRequestError(c, err, http.StatusBadRequest, event_name)
+			handleBadRequestError(c, err, event_name)
 			return
 		}
 
@@ -59,7 +58,7 @@ func polynomialFeaturesFitTransformResponse(polynomialClient *polynomialGRPCClie
 
 		var data pb.PolynomialFeaturesFitTransformRequest
 		if err := readRequestData(c, &data); err != nil {
-			handleBadRequestError(c, err, http.StatusBadRequest, event_name)
+			handleBadRequestError(c, err, event_name)
 			return
 		}
 
