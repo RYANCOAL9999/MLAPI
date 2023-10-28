@@ -7,7 +7,7 @@ from Python.quotes.model.linearService import LinearService
 from Python.quotes.model.generalService import GeneralService
 from Python.quotes.model.neighborsService import NeighborsService
 from Python.quotes.model.polynomialService import PolynomialService
-from Python.quotes.lib.helper import checkAPI, generatePortMulti
+from Python.quotes.model.helper import checkAPI, generatePortMulti
 from flask import Flask, jsonify, make_response, request, Response
 from flask.status import HTTP_204_NO_CONTENT, HTTP_200_OK, HTTP_404_NOT_FOUND
 
