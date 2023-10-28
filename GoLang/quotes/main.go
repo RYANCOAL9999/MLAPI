@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 
+	model "github.com/RYANCOAL9999/MLAPI/GoLang/quotes/model"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	ginadapter "github.com/awslabs/aws-lambda-go-api-proxy/gin"
@@ -18,75 +19,75 @@ func init() {
 
 	r := gin.Default()
 
-	generalClient, err := newGeneralGRPCClient("localhost:50051")
+	generalClient, err := model.NewGeneralGRPCClient("localhost:50051")
 	if err != nil {
 		log.Fatalf(err.Error())
 		return
 	}
 
-	linearClient, err := newLinearGRPCClient("localhost:50051")
+	linearClient, err := model.NewLinearGRPCClient("localhost:50051")
 	if err != nil {
 		log.Fatalf(err.Error())
 		return
 	}
 
-	neighborsClient, err := newNeighborsGPRCClient("localhost:50052")
+	neighborsClient, err := model.NewNeighborsGPRCClient("localhost:50052")
 	if err != nil {
 		log.Fatalf(err.Error())
 		return
 	}
 
-	polynomialClient, err := newPolynomialGRPCClient("localhost:50053")
+	polynomialClient, err := model.NewPolynomialGRPCClient("localhost:50053")
 	if err != nil {
 		log.Fatalf(err.Error())
 		return
 	}
 
-	svmClient, err := newSVMGRPCClient("localhost:50054")
+	svmClient, err := model.NewSVMGRPCClient("localhost:50054")
 	if err != nil {
 		log.Fatalf(err.Error())
 		return
 	}
 
-	r.GET("/api/head", headerResponse(generalClient))
+	r.GET("/api/head", model.HeaderResponse(generalClient))
 
-	r.GET("/api/info", infoResponse(generalClient))
+	r.GET("/api/info", model.InfoResponse(generalClient))
 
-	r.GET("/api/descible", describlerResponse(generalClient))
+	r.GET("/api/descible", model.DescriblerResponse(generalClient))
 
-	r.POST("/api/linearSVC", linearSVCResponse(svmClient))
+	r.POST("/api/linearSVC", model.LinearSVCResponse(svmClient))
 
-	r.POST("/api/linearSVR", linearSVRResponse(svmClient))
+	r.POST("/api/linearSVR", model.LinearSVRResponse(svmClient))
 
-	r.POST("/api/svc", svcResponse(svmClient))
+	r.POST("/api/svc", model.SVCResponse(svmClient))
 
-	r.POST("/api/polynomialFeatures", polynomialFeaturesResponse(polynomialClient))
+	r.POST("/api/polynomialFeatures", model.PolynomialFeaturesResponse(polynomialClient))
 
-	r.POST("/api/polynomialFeaturesFitTransform", polynomialFeaturesFitTransformResponse(polynomialClient))
+	r.POST("/api/polynomialFeaturesFitTransform", model.PolynomialFeaturesFitTransformResponse(polynomialClient))
 
-	r.POST("/api/nearestNeighbors", nearestNeighborsResponse(neighborsClient))
+	r.POST("/api/nearestNeighbors", model.NearestNeighborsResponse(neighborsClient))
 
-	r.POST("/api/kdTree", kdTreeResponse(neighborsClient))
+	r.POST("/api/kdTree", model.KDTreeResponse(neighborsClient))
 
-	r.POST("/api/nearestCentroid", nearestCentroidResponse(neighborsClient))
+	r.POST("/api/nearestCentroid", model.NearestCentroidResponse(neighborsClient))
 
-	r.POST("/api/linearRegression", linearRegressionResponse(linearClient))
+	r.POST("/api/linearRegression", model.LinearRegressionResponse(linearClient))
 
-	r.POST("/api/ridge", ridgeResponse(linearClient))
+	r.POST("/api/ridge", model.RidgeResponse(linearClient))
 
-	r.POST("/api/ridgeCV", ridgeCVResponse(linearClient))
+	r.POST("/api/ridgeCV", model.RidgeCVResponse(linearClient))
 
-	r.POST("/api/lasso", lassoResponse(linearClient))
+	r.POST("/api/lasso", model.LassoResponse(linearClient))
 
-	r.POST("/api/lassoLars", lassoLarsResponse(linearClient))
+	r.POST("/api/lassoLars", model.LassoLarsResponse(linearClient))
 
-	r.POST("/api/bayesianRidge", bayesianRidgeResponse(linearClient))
+	r.POST("/api/bayesianRidge", model.BayesianRidgeResponse(linearClient))
 
-	r.POST("/api/tweedieRegressor", tweedieRegressorResponse(linearClient))
+	r.POST("/api/tweedieRegressor", model.TweedieRegressorResponse(linearClient))
 
-	r.POST("/api/sgdClassifier", sgdClassifierResponse(linearClient))
+	r.POST("/api/sgdClassifier", model.SGDClassifierResponse(linearClient))
 
-	r.POST("/api/elasticNet", elasticNetResponse(linearClient))
+	r.POST("/api/elasticNet", model.ElasticNetResponse(linearClient))
 
 	ginLambda = ginadapter.New(r)
 

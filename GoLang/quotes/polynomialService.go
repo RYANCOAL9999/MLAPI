@@ -10,28 +10,28 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-type polynomialGRPCClient struct {
+type PolynomialGRPCClient struct {
 	client pb.PolynomialServiceClient
 }
 
-func newPolynomialGRPCClient(addr string) (*polynomialGRPCClient, error) {
+func NewPolynomialGRPCClient(addr string) (*PolynomialGRPCClient, error) {
 	conn, err := grpc.Dial(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return nil, err
 	}
-	return &polynomialGRPCClient{
+	return &PolynomialGRPCClient{
 		client: pb.NewPolynomialServiceClient(conn),
 	}, nil
 }
 
-func polynomialFeaturesResponse(polynomialClient *polynomialGRPCClient) gin.HandlerFunc {
+func PolynomialFeaturesResponse(polynomialClient *PolynomialGRPCClient) gin.HandlerFunc {
 	return func(c *gin.Context) {
 
 		const event_name = "polynomial features"
 
 		var data pb.PolynomialFeaturesRequest
-		if err := readRequestData(c, &data); err != nil {
-			handleBadRequestError(c, err, event_name)
+		if err := ReadRequestData(c, &data); err != nil {
+			HandleBadRequestError(c, err, event_name)
 			return
 		}
 
@@ -41,24 +41,24 @@ func polynomialFeaturesResponse(polynomialClient *polynomialGRPCClient) gin.Hand
 		response, err := polynomialClient.client.PolynomialFeaturesEvent(ctx, &data)
 
 		if err != nil {
-			handleGRPCError(c, err, event_name)
+			HandleGRPCError(c, err, event_name)
 			return
 		}
 
-		sendResponse(c, response, event_name)
+		SendResponse(c, response, event_name)
 
 	}
 
 }
 
-func polynomialFeaturesFitTransformResponse(polynomialClient *polynomialGRPCClient) gin.HandlerFunc {
+func PolynomialFeaturesFitTransformResponse(polynomialClient *PolynomialGRPCClient) gin.HandlerFunc {
 	return func(c *gin.Context) {
 
 		const event_name = "polynomial features fit transform"
 
 		var data pb.PolynomialFeaturesFitTransformRequest
-		if err := readRequestData(c, &data); err != nil {
-			handleBadRequestError(c, err, event_name)
+		if err := ReadRequestData(c, &data); err != nil {
+			HandleBadRequestError(c, err, event_name)
 			return
 		}
 
@@ -68,11 +68,11 @@ func polynomialFeaturesFitTransformResponse(polynomialClient *polynomialGRPCClie
 		response, err := polynomialClient.client.PolynomialFeaturesFitTransformEvent(ctx, &data)
 
 		if err != nil {
-			handleGRPCError(c, err, event_name)
+			HandleGRPCError(c, err, event_name)
 			return
 		}
 
-		sendResponse(c, response, event_name)
+		SendResponse(c, response, event_name)
 	}
 
 }

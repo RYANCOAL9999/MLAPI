@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func readRequestData(c *gin.Context, dataPointer interface{}) error {
+func ReadRequestData(c *gin.Context, dataPointer interface{}) error {
 	bodyAsByteArray, err := io.ReadAll(c.Request.Body)
 	if err != nil {
 		return err
@@ -18,17 +18,17 @@ func readRequestData(c *gin.Context, dataPointer interface{}) error {
 	return err
 }
 
-func handleGRPCError(c *gin.Context, err error, errMsg string) {
+func HandleGRPCError(c *gin.Context, err error, errMsg string) {
 	log.Printf("could not %s: %v", errMsg, err)
 	c.JSON(http.StatusInternalServerError, gin.H{"error": errMsg})
 }
 
-func handleBadRequestError(c *gin.Context, err error, errMsg string) {
+func HandleBadRequestError(c *gin.Context, err error, errMsg string) {
 	log.Printf("could not %s: %v", errMsg, err)
 	c.JSON(http.StatusBadRequest, gin.H{"error": "Bad Request"})
 }
 
-func sendResponse(c *gin.Context, response interface{}, errMsg string) {
+func SendResponse(c *gin.Context, response interface{}, errMsg string) {
 	responseData, err := json.Marshal(response)
 	if err != nil {
 		log.Printf("%s encoding error: %v", errMsg, err)
