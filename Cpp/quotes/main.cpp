@@ -1,6 +1,6 @@
-#include <lib/aws-sdk-lambda/header/lambda-runtime/runtime.h>
-#include <lib/aws-sdk-core/header/core/utils/json/JsonSerializer.h>
-#include <lib/aws-sdk-core/header/core/utils/memory/stl/SimpleStringStream.h>
+#include <aws/lambda-runtime/runtime.h>
+#include <aws/core/utils/json/JsonSerializer.h>
+#include <aws/core/utils/memory/stl/SimpleStringStream.h>
 
 using namespace aws::lambda_runtime;
 
