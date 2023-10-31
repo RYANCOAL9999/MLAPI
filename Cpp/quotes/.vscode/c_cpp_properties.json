@@ -4,7 +4,10 @@
             "name": "Mac",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/lib/aws-sdk/include"
+                "${workspaceFolder}/lib/aws-sdk",
+                "${workspaceFolder}/lib/grpc-sdk",
+                "${workspaceFolder}/lib/ai-grpc-sdk",
+                "${workspaceFolder}/lib/crow-sdk"
             ],
             "defines": [],
             "macFrameworkPath": [

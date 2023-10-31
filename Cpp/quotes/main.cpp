@@ -1,57 +1,84 @@
+#include <iostream>
+#include "crow.h"
 #include <aws/lambda-runtime/runtime.h>
-#include <aws/core/utils/json/JsonSerializer.h>
-#include <aws/core/utils/memory/stl/SimpleStringStream.h>
+#include <model/generalService/generalService.h>
+// #include <aws/core/utils/json/JsonSerializer.h>
+// #include <aws/core/utils/memory/stl/SimpleStringStream.h>
 
+using namespace std;
+using namespace crow;
 using namespace aws::lambda_runtime;
+
+void setupRoutes(
+    crow::SimpleApp& app, 
+    GeneralServiceClient& gsclient
+) 
+{
+    CROW_ROUTE(app, "/api/head")
+    .methods("GET"_method)
+    ([&gsclient](
+        const crow::request& req, 
+        crow::response& res
+    ) 
+    {
+        string request_msg = "";
+        DataFrame response = gsclient.headerResponse(request_msg);
+        res.set_header("Content-Type", "application/json");
+        res.write(response.SerializeAsString());
+        res.end();
+    });
+
+    CROW_ROUTE(app, "/api/info")
+    .methods("GET"_method)
+    ([&gsclient](
+        const crow::request& req, 
+        crow::response& res
+    ) 
+    {
+        string request_msg = "";
+        DataFrame response = gsclient.infoResponse(request_msg);
+        res.set_header("Content-Type", "application/json");
+        res.write(response.SerializeAsString());
+        res.end();
+    });
+
+    CROW_ROUTE(app, "/api/describle")
+    .methods("GET"_method)
+    ([&gsclient](
+        const crow::request& req, 
+        crow::response& res
+    ) 
+    {
+        string request_msg = "";
+        DataFrame response = gsclient.describlerResponse(request_msg);
+        res.set_header("Content-Type", "application/json");
+        res.write(response.SerializeAsString());
+        res.end();
+    });
+
+
+
+
+}
 
 invocation_response my_handler(invocation_request const& request)
 {
+    string server_address_1 = "localhost:50051";
+    GeneralServiceClient gsclient(server_address_1);
 
-    using namespace Aws::Utils::Json;
+    SimpleApp app;
 
-    JsonValue json(request.payload);
-    if (!json.WasParseSuccessful()) {
-        return invocation_response::failure("Failed to parse input JSON", "InvalidJSON");
-    }
+    setupRoutes(
+        app, 
+        gsclient
+    );
 
-    auto v = json.View();
-    Aws::SimpleStringStream ss;
-    ss << "Good ";
+    app.port(8080).multithreaded().run();
 
-    if (v.ValueExists("body") && v.GetObject("body").IsString()) {
-        auto body = v.GetString("body");
-        JsonValue body_json(body);
-
-        if (body_json.WasParseSuccessful()) {
-            auto body_v = body_json.View();
-            ss << (body_v.ValueExists("time") && body_v.GetObject("time").IsString() ? body_v.GetString("time") : "");
-        }
-    }
-    ss << ", ";
-
-    if (v.ValueExists("queryStringParameters")) {
-        auto query_params = v.GetObject("queryStringParameters");
-        ss << (query_params.ValueExists("name") && query_params.GetObject("name").IsString()
-                   ? query_params.GetString("name")
-                   : "")
-           << " of ";
-        ss << (query_params.ValueExists("city") && query_params.GetObject("city").IsString()
-                   ? query_params.GetString("city")
-                   : "")
-           << ". ";
-    }
-
-    if (v.ValueExists("headers")) {
-        auto headers = v.GetObject("headers");
-        ss << "Happy "
-           << (headers.ValueExists("day") && headers.GetObject("day").IsString() ? headers.GetString("day") : "")
-           << "!";
-    }
-
-    JsonValue resp;
-    resp.WithString("message", ss.str());
-
-    return invocation_response::success(resp.View().WriteCompact(), "application/json");
+    return invocation_response::success(
+        "Marning Learning API starting Success",
+        "application/json"
+    );
 }
 
 int main()
