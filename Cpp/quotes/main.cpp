@@ -1,9 +1,9 @@
 #include <iostream>
 #include "crow.h"
 #include <aws/lambda-runtime/runtime.h>
-#include <model/generalService/generalService.h>
 // #include <aws/core/utils/json/JsonSerializer.h>
 // #include <aws/core/utils/memory/stl/SimpleStringStream.h>
+#include <model/generalService/generalServiceClient.h>
 
 using namespace std;
 using namespace crow;

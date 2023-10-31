@@ -1,4 +1,4 @@
-#include "generalService.h"
+#include "generalServiceClient.h"
 #include "json/json.h"
 
 using namespace std;

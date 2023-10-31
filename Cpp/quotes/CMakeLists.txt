@@ -1,7 +1,7 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.8)
 set(CMAKE_CXX_STANDARD 11)
 
-project(quotes LANGUAGES CXX)
+project(quotes C CXX)
 
 find_package(aws-lambda-runtime REQUIRED)
 find_package(AWSSDK COMPONENTS core)

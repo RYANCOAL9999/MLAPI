@@ -1,5 +1,5 @@
-#ifndef GeneralService_H
-#define GeneralService_H
+#ifndef GeneralService_Client_H
+#define GeneralService_Client_H
 
 #include "string"
 #include <grpc++/grpc++.h>
@@ -32,4 +32,4 @@ class GeneralServiceClient {
 
 
 
-#endif // GeneralService_H
+#endif // GeneralService_Client_H

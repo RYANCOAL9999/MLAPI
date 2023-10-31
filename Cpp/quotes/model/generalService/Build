@@ -1,0 +1,10 @@
+licenses(["notice"])
+
+cc_binary(
+    name = "client",
+    srcs = ["generalServiceClient.cc"],
+    defines = ["BAZEL_BUILD"],
+    deps = [
+        "//:grpc++"
+    ],
+)
