@@ -1,0 +1,25 @@
+service: quotes
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: provided
+
+functions:
+  api:
+    handler: bin/main
+    events:
+      - httpApi: '*'
+                                                                                                                                                         
+package:
+  patterns:
+    - '!*/**'
+    - bin/main
+
+plugins:
+  - serverless-apigw-binary
+  - serverless-apigwy-binary
+  
+
+

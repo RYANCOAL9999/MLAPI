@@ -56,7 +56,7 @@ DataFrame GeneralServiceClient::describlerResponse(const string& request_msg)
     Status status = stub_->DescriblerEvent(&context, request, &response);
 
     if (status.ok()) {
-        return DataFrame(response);
+        return response;
     } else {
         std::cerr << "RPC failed: " << status.error_code() << ": " << status.error_message() << std::endl;
         return DataFrame();

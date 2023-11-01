@@ -6,9 +6,6 @@
 #include <ai-grpc-sdk/linear_expression.pb.h>
 #include <ai-grpc-sdk/linear_expression.grpc.pb.h>
 
-using grpc::Channel;
-using grpc::ClientContext;
-using grpc::Status;
 using namespace std;
 
 class LinearServiceClient {
@@ -35,7 +32,7 @@ class LinearServiceClient {
         AIProto::ElasticNetReply elasticNetResponse(const string& request_msg);
 
     private:
-        shared_ptr<Channel> channel_;
+        shared_ptr<grpc::Channel> channel_;
         unique_ptr<AIProto::LinearService::Stub> stub_;
 
 };

@@ -6,9 +6,6 @@
 #include <ai-grpc-sdk/polynomial_features.pb.h>
 #include <ai-grpc-sdk/polynomial_features.grpc.pb.h>
 
-using grpc::Channel;
-using grpc::ClientContext;
-using grpc::Status;
 using namespace std;
 
 class PolynomialServiceClient {
@@ -21,7 +18,7 @@ class PolynomialServiceClient {
         AIProto::PolynomialFeaturesFitTransformReply polynomialFeaturesFitTransformResponse(const string& request_msg);
 
     private:
-        shared_ptr<Channel> channel_;
+        shared_ptr<grpc::Channel> channel_;
         unique_ptr<AIProto::PolynomialService::Stub> stub_;
 
 };

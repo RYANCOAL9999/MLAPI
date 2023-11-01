@@ -1,0 +1,6 @@
+name: quotes
+org: ryancoal9999
+description: Deploys a Cpp Crow API service, backed by DynamoDB, with traditional Serverless Framework
+keywords: aws, serverless, faas, lambda, Cpp, Crow, dynamodb
+repo: https://github.com/RYANCOAL9999/MLAPI/GoLang/quotes
+license: MIT

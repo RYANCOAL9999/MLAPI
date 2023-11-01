@@ -6,9 +6,6 @@
 #include <ai-grpc-sdk/nearest_neighbors.pb.h>
 #include <ai-grpc-sdk/nearest_neighbors.grpc.pb.h>
 
-using grpc::Channel;
-using grpc::ClientContext;
-using grpc::Status;
 using namespace std;
 
 class NeighborsServiceClient {
@@ -24,7 +21,7 @@ class NeighborsServiceClient {
         AIProto::NearestCentroidReply nearestCentroidResponse(const string& request_msg);
 
     private:
-        shared_ptr<Channel> channel_;
+        shared_ptr<grpc::Channel> channel_;
         unique_ptr<AIProto::NeighborsService::Stub> stub_;
 };
 
