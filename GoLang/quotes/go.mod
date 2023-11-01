@@ -3,7 +3,7 @@ module quotes
 go 1.21.3
 
 require (
-	github.com/RYANCOAL9999/AI_Go_Proto_File v0.0.0-20231026223256-1d820f3af4ec // indirect
+	github.com/RYANCOAL9999/AI_Go_Proto_File v0.0.0-20231101234207-cb50d10df5cf // indirect
 	github.com/aws/aws-lambda-go v1.41.0 // indirect
 	github.com/awslabs/aws-lambda-go-api-proxy v0.16.0 // indirect
 	github.com/bytedance/sonic v1.10.2 // indirect
@@ -32,10 +32,10 @@ require (
 	golang.org/x/net v0.17.0 // indirect
 	golang.org/x/sys v0.13.0 // indirect
 	golang.org/x/text v0.13.0 // indirect
-	google.golang.org/genproto v0.0.0-20231012201019-e917dd12ba7a // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20231016165738-49dd2c1f3d0b // indirect
+	google.golang.org/genproto v0.0.0-20231030173426-d783a09b4405 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20231030173426-d783a09b4405 // indirect
 	google.golang.org/grpc v1.59.0 // indirect
-	google.golang.org/grpc/examples v0.0.0-20231026203026-8cb98464e599 // indirect
+	google.golang.org/grpc/examples v0.0.0-20231031171243-70f1a4045da9 // indirect
 	google.golang.org/protobuf v1.31.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

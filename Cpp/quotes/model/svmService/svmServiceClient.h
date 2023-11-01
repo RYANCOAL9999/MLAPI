@@ -14,8 +14,6 @@ class SVMServiceClient {
 
         SVMServiceClient(string& url);
 
-        google::protobuf::Any ConvertJsonViewToAny(const Aws::Utils::Json::JsonView &jsonView, string name);
-
         AIProto::LinearReply linearSVCResponse(const string &request_msg);
 
         AIProto::LinearReply linearSVRResponse(const string& request_msg);
