@@ -3,8 +3,7 @@ import grpc
 from dataclasses import asdict
 from lib.proto.py.svm_expression_pb2_grpc import SVMServiceStub
 from lib.proto.py.svm_expression_pb2 import (
-    LinearSVCRequest,
-    LinearSVRRequest,    
+    LinearRequest,    
     SVCRequest
 )
 
@@ -18,7 +17,7 @@ class SVMService(object):
             data
         )->dict:
         with self.__channel:
-            request_message = LinearSVCRequest(
+            request_message = LinearRequest(
                 x_drop_data = data.x_drop_data,
                 y_drop_data = data.y_drop_data,
                 size = data.size,
@@ -35,7 +34,7 @@ class SVMService(object):
             data
         )->dict:
         with self.__channel:
-            request_message = LinearSVRRequest(
+            request_message = LinearRequest(
                 x_drop_data = data.x_drop_data,
                 y_drop_data = data.y_drop_data,
                 size = data.size,

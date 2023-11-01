@@ -5,7 +5,7 @@ using namespace std;
 
 GeneralServiceClient::GeneralServiceClient(string& url): 
     channel_(grpc::CreateChannel(url, grpc::InsecureChannelCredentials())),
-    stub_(GeneralService::NewStub(channel_)) 
+    stub_(AIProto::GeneralService::NewStub(channel_)) 
 {
 }
 

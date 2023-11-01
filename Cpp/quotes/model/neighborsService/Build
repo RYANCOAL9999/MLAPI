@@ -2,10 +2,12 @@ licenses(["notice"])
 
 cc_binary(
     name = "client",
-    srcs = ["generalServiceClient.cc"],
+    srcs = ["neighborsService/neighborsServiceClient.cc"],
     defines = ["BAZEL_BUILD"],
     deps = [
         "//:grpc++",
+        "//lib/AIProto/lib:enum_expression",
+        "//lib/AIProto/lib:np_library",
         "//lib/AIProto:general_expression"
     ],
 )

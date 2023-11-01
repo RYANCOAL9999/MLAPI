@@ -109,7 +109,7 @@ class LinearService(object):
             response = self.__stub.LassoLarsLassoExpressionEvent(request_message)
             return asdict(response)
         
-    def BayesianRidgeResponse(
+    def bayesianRidgeResponse(
             self, 
             data
         )->dict:

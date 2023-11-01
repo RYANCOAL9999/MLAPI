@@ -66,7 +66,7 @@ def describle()->Response:
 
 @app.route("/api/linearSVC", methods=["POST"])
 def linearSVC()->Response:
-    response = checkAPI(request, svmService.linearSVCResponse)
+    response = checkAPI(request, svmService.linearResponse)
     if response is None:
         response = make_response(
             jsonify(
@@ -80,7 +80,7 @@ def linearSVC()->Response:
 
 @app.route("/api/linearSVR", methods=["POST"])
 def linearSVR()->Response:
-    response = checkAPI(request, svmService.linearSVRResponse)
+    response = checkAPI(request, svmService.linearResponse)
     if response is None:
         response = make_response(
             jsonify(
@@ -248,11 +248,11 @@ def lassoLars()->Response:
 
 @app.route("/api/bayesianRidge", methods=["POST"])
 def bayesianRidge()->Response: 
-    response = checkAPI(request, linearService.BayesianRidgeResponse)
+    response = checkAPI(request, linearService.bayesianRidgeResponse)
     if response is None:
         response = make_response(
             jsonify(
-                linearService.BayesianRidgeResponse(
+                linearService.bayesianRidgeResponse(
                     request.json
                 )
             ),

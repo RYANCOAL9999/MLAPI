@@ -9,24 +9,23 @@
 using grpc::Channel;
 using grpc::ClientContext;
 using grpc::Status;
-using namespace std;
-using AIProto::GeneralService;
 using AIProto::DataFrame;
+using namespace std;
 
 class GeneralServiceClient {
 
     public:
         GeneralServiceClient(string& url);
 
-        DataFrame headerResponse(const std::string& request_msg);
+        DataFrame headerResponse(const string& request_msg);
 
-        DataFrame infoResponse(const std::string& request_msg);
+        DataFrame infoResponse(const string& request_msg);
 
-        DataFrame describlerResponse(const std::string& request_msg);
+        DataFrame describlerResponse(const string& request_msg);
 
     private:
         shared_ptr<Channel> channel_;
-        unique_ptr<GeneralService::Stub> stub_;
+        unique_ptr<AIProto::GeneralService::Stub> stub_;
 
 };
 
