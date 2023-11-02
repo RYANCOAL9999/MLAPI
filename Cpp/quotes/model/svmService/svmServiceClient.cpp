@@ -5,17 +5,14 @@
 
 using grpc::Status;
 using grpc::ClientContext;
-using AIProto::SVCReply;
 using AIProto::SVCRequest;
-using AIProto::LinearReply;
 using AIProto::Linearkwargs;
 using AIProto::LinearRequest;
 using namespace Aws::Utils::Json;
 
-
 SVMServiceClient::SVMServiceClient(string &url): 
-    channel_(grpc::CreateChannel(url, grpc::InsecureChannelCredentials())),
-    stub_(AIProto::SVMService::NewStub(channel_)) 
+    channel_(CreateChannel(url, InsecureChannelCredentials())),
+    stub_(SVMService::NewStub(channel_)) 
 {
 }
 

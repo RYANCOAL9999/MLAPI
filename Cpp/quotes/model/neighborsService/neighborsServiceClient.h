@@ -7,6 +7,11 @@
 #include <ai-grpc-sdk/nearest_neighbors.grpc.pb.h>
 
 using namespace std;
+using namespace grpc;
+using AIProto::NeighborsService;
+using AIProto::NearestNeighborsReply;
+using AIProto::KDTreeReply;
+using AIProto::NearestCentroidReply;
 
 class NeighborsServiceClient {
 
@@ -14,15 +19,15 @@ class NeighborsServiceClient {
 
         NeighborsServiceClient(string& url);
 
-        AIProto::NearestNeighborsReply nearestNeighborsResponse(const string& request_msg);
+        NearestNeighborsReply nearestNeighborsResponse(const string& request_msg);
 
-        AIProto::KDTreeReply kdTreeResponse(const string& request_msg);
+        KDTreeReply kdTreeResponse(const string& request_msg);
 
-        AIProto::NearestCentroidReply nearestCentroidResponse(const string& request_msg);
+        NearestCentroidReply nearestCentroidResponse(const string& request_msg);
 
     private:
-        shared_ptr<grpc::Channel> channel_;
-        unique_ptr<AIProto::NeighborsService::Stub> stub_;
+        shared_ptr<Channel> channel_;
+        unique_ptr<NeighborsService::Stub> stub_;
 };
 
 #endif // NeighborsService_Client_H

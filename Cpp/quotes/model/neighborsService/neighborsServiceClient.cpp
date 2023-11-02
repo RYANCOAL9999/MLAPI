@@ -5,14 +5,15 @@
 
 using grpc::Status;
 using grpc::ClientContext;
-using AIProto::NearestNeighborsReply;
-using AIProto::KDTreeReply;
-using AIProto::NearestCentroidReply;
+using AIProto::NearestNeighborsRequest;
+using AIProto::KDTreeRequest;
+using AIProto::NearestCentroidRequest;
+using AIProto::NearestNeighborskwargs;
 using namespace Aws::Utils::Json;
 
 NeighborsServiceClient::NeighborsServiceClient(string &url): 
-    channel_(grpc::CreateChannel(url, grpc::InsecureChannelCredentials())),
-    stub_(AIProto::NeighborsService::NewStub(channel_)) 
+    channel_(CreateChannel(url, InsecureChannelCredentials())),
+    stub_(NeighborsService::NewStub(channel_)) 
 {
 }
 
@@ -22,9 +23,9 @@ NearestNeighborsReply NeighborsServiceClient::nearestNeighborsResponse(const str
 
     ClientContext context;
 
-    AIProto::NearestNeighborsRequest request;
+    NearestNeighborsRequest request;
     
-    AIProto::NearestNeighborskwargs kwargs;
+    NearestNeighborskwargs kwargs;
 
     JsonValue json(request_msg);
 
@@ -68,7 +69,7 @@ KDTreeReply NeighborsServiceClient::kdTreeResponse(const string &request_msg)
 
     ClientContext context;
 
-    AIProto::KDTreeRequest request;
+    KDTreeRequest request;
 
     JsonValue json(request_msg);
 
@@ -108,7 +109,7 @@ NearestCentroidReply NeighborsServiceClient::nearestCentroidResponse(const strin
 
     ClientContext context;
 
-    AIProto::NearestCentroidRequest request;
+    NearestCentroidRequest request;
 
     JsonValue json(request_msg);
 

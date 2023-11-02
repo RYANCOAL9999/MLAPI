@@ -7,19 +7,23 @@
 #include <ai-grpc-sdk/polynomial_features.grpc.pb.h>
 
 using namespace std;
+using namespace grpc;
+using AIProto::PolynomialService;
+using AIProto::PolynomialFeaturesReply;
+using AIProto::PolynomialFeaturesFitTransformReply;
 
 class PolynomialServiceClient {
 
     public:
         PolynomialServiceClient(string& url);
 
-        AIProto::PolynomialFeaturesReply polynomialFeaturesResponse(const string& request_msg);
+        PolynomialFeaturesReply polynomialFeaturesResponse(const string& request_msg);
 
-        AIProto::PolynomialFeaturesFitTransformReply polynomialFeaturesFitTransformResponse(const string& request_msg);
+        PolynomialFeaturesFitTransformReply polynomialFeaturesFitTransformResponse(const string& request_msg);
 
     private:
-        shared_ptr<grpc::Channel> channel_;
-        unique_ptr<AIProto::PolynomialService::Stub> stub_;
+        shared_ptr<Channel> channel_;
+        unique_ptr<PolynomialService::Stub> stub_;
 
 };
 

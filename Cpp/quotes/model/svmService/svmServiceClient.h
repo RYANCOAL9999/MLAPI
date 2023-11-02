@@ -7,6 +7,11 @@
 #include <ai-grpc-sdk/svm_expression.grpc.pb.h>
 
 using namespace std;
+using namespace grpc;
+using AIProto::SVCReply;
+using AIProto::SVMService;
+using AIProto::LinearReply;
+
 
 class SVMServiceClient {
 
@@ -14,15 +19,15 @@ class SVMServiceClient {
 
         SVMServiceClient(string& url);
 
-        AIProto::LinearReply linearSVCResponse(const string &request_msg);
+        LinearReply linearSVCResponse(const string &request_msg);
 
-        AIProto::LinearReply linearSVRResponse(const string& request_msg);
+        LinearReply linearSVRResponse(const string& request_msg);
 
-        AIProto::SVCReply svcResponse(const string& request_msg);
+        SVCReply svcResponse(const string& request_msg);
 
     private:
-        shared_ptr<grpc::Channel> channel_;
-        unique_ptr<AIProto::SVMService::Stub> stub_;
+        shared_ptr<Channel> channel_;
+        unique_ptr<SVMService::Stub> stub_;
 
 };
 

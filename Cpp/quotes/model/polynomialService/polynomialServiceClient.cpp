@@ -5,13 +5,14 @@
 
 using grpc::Status;
 using grpc::ClientContext;
-using AIProto::PolynomialFeaturesReply;
-using AIProto::PolynomialFeaturesFitTransformReply;
+using AIProto::PolynomialFeaturesRequest;
+using AIProto::PolynomialFeaturesFitTransformkwargs;
+using AIProto::PolynomialFeaturesFitTransformRequest;
 using namespace Aws::Utils::Json;
 
 PolynomialServiceClient::PolynomialServiceClient(string &url): 
-    channel_(grpc::CreateChannel(url, grpc::InsecureChannelCredentials())),
-    stub_(AIProto::PolynomialService::NewStub(channel_)) 
+    channel_(CreateChannel(url, InsecureChannelCredentials())),
+    stub_(PolynomialService::NewStub(channel_)) 
 {
 }
 
@@ -21,7 +22,7 @@ PolynomialFeaturesReply PolynomialServiceClient::polynomialFeaturesResponse(cons
 
     ClientContext context;
 
-    AIProto::PolynomialFeaturesRequest request;
+    PolynomialFeaturesRequest request;
 
     JsonValue json(request_msg);
 
@@ -56,9 +57,9 @@ PolynomialFeaturesFitTransformReply PolynomialServiceClient::polynomialFeaturesF
 
     ClientContext context;
 
-    AIProto::PolynomialFeaturesFitTransformRequest request;
+    PolynomialFeaturesFitTransformRequest request;
 
-    AIProto::PolynomialFeaturesFitTransformkwargs kwargs;
+    PolynomialFeaturesFitTransformkwargs kwargs;
 
     JsonValue json(request_msg);
 

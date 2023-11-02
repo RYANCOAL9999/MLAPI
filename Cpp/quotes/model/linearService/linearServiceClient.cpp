@@ -5,20 +5,29 @@
 
 using grpc::Status;
 using grpc::ClientContext;
-using AIProto::LinearRegressionReply;
-using AIProto::LinearRidgeReply;
-using AIProto::LinearRidgeCVReply;
-using AIProto::LassoExpressionReply;
-using AIProto::LassoLarsLassoExpressionReply;
-using AIProto::BayesianRidgeReply;
-using AIProto::TweedieRegressorReply;
-using AIProto::SGDClassifierReply;
-using AIProto::ElasticNetReply;
+using AIProto::LinearRegressionRequest;
+using AIProto::LinearRidgeRequest;
+using AIProto::LinearRidgeCVRequest;
+using AIProto::LassoExpressionRequest;
+using AIProto::LassoLarsLassoExpressionRequest;
+using AIProto::BayesianRidgeRequest;
+using AIProto::TweedieRegressorRequest;
+using AIProto::SGDClassifierRequest;
+using AIProto::ElasticNetRequest;
+using AIProto::LinearRegressionkwargs;
+using AIProto::LinearRidgekwargs;
+using AIProto::LinearRidgeCVkwargs;
+using AIProto::LassoExpressionkwargs;
+using AIProto::LassoLarsLassoExpressionkwargs;
+using AIProto::BayesianRidgekwargs;
+using AIProto::TweedieRegressorkwargs;
+using AIProto::SGDClassifierkwargs;
+using AIProto::ElasticNetkwargs;
 using namespace Aws::Utils::Json;
 
 LinearServiceClient::LinearServiceClient(string &url): 
-    channel_(grpc::CreateChannel(url, grpc::InsecureChannelCredentials())),
-    stub_(AIProto::LinearService::NewStub(channel_)) 
+    channel_(CreateChannel(url, InsecureChannelCredentials())),
+    stub_(LinearService::NewStub(channel_)) 
 {
 }
 
@@ -28,9 +37,9 @@ LinearRegressionReply LinearServiceClient::linearRegressionResponse(const string
 
     ClientContext context;
 
-    AIProto::LinearRegressionRequest request;
+    LinearRegressionRequest request;
     
-    AIProto::LinearRegressionkwargs kwargs;
+    LinearRegressionkwargs kwargs;
 
     JsonValue json(request_msg);
 
@@ -73,9 +82,9 @@ LinearRidgeReply LinearServiceClient::ridgeResponse(const string &request_msg)
 
     ClientContext context;
 
-    AIProto::LinearRidgeRequest request;
+    LinearRidgeRequest request;
     
-    AIProto::LinearRidgekwargs kwargs;
+    LinearRidgekwargs kwargs;
 
     JsonValue json(request_msg);
 
@@ -120,9 +129,9 @@ LinearRidgeCVReply LinearServiceClient::ridgeCVResponse(const string &request_ms
 
     ClientContext context;
 
-    AIProto::LinearRidgeCVRequest request;
+    LinearRidgeCVRequest request;
     
-    AIProto::LinearRidgeCVkwargs kwargs;
+    LinearRidgeCVkwargs kwargs;
 
     JsonValue json(request_msg);
 
@@ -167,9 +176,9 @@ LassoExpressionReply LinearServiceClient::lassoResponse(const string &request_ms
 
     ClientContext context;
 
-    AIProto::LassoExpressionRequest request;
+    LassoExpressionRequest request;
     
-    AIProto::LassoExpressionkwargs kwargs;
+    LassoExpressionkwargs kwargs;
 
     JsonValue json(request_msg);
 
@@ -217,9 +226,9 @@ LassoLarsLassoExpressionReply LinearServiceClient::lassoLarsResponse(const strin
 
     ClientContext context;
 
-    AIProto::LassoLarsLassoExpressionRequest request;
+    LassoLarsLassoExpressionRequest request;
     
-    AIProto::LassoLarsLassoExpressionkwargs kwargs;
+    LassoLarsLassoExpressionkwargs kwargs;
 
     JsonValue json(request_msg);
 
@@ -269,9 +278,9 @@ BayesianRidgeReply LinearServiceClient::bayesianRidgeResponse(const string &requ
 
     ClientContext context;
 
-    AIProto::BayesianRidgeRequest request;
+    BayesianRidgeRequest request;
     
-    AIProto::BayesianRidgekwargs kwargs;
+    BayesianRidgekwargs kwargs;
 
     JsonValue json(request_msg);
 
@@ -322,9 +331,9 @@ TweedieRegressorReply LinearServiceClient::tweedieRegressorResponse(const string
 
     ClientContext context;
 
-    AIProto::TweedieRegressorRequest request;
+    TweedieRegressorRequest request;
     
-    AIProto::TweedieRegressorkwargs kwargs;
+    TweedieRegressorkwargs kwargs;
 
     JsonValue json(request_msg);
 
@@ -371,7 +380,7 @@ SGDClassifierReply LinearServiceClient::sgdClassifierResponse(const string &requ
 
     ClientContext context;
 
-    AIProto::SGDClassifierRequest request;
+    SGDClassifierRequest request;
     
     AIProto::SGDClassifierkwargs kwargs;
 
@@ -394,8 +403,7 @@ SGDClassifierReply LinearServiceClient::sgdClassifierResponse(const string &requ
         JsonView body_v = json_kwags.View();
         kwargs.set_loss(static_cast<AIProto::Loss>(body_v.GetInteger("loss")));
         kwargs.set_penalty(static_cast<AIProto::Penalty>(body_v.GetInteger("penalty")));
-        // kwargs.set_alpha(body_v.GetDouble("alpha"));
-        kwargs.set_aplha(body_v.GetDouble("aplha"));
+        kwargs.set_alpha(body_v.GetDouble("alpha"));
         kwargs.set_l1_ratio(body_v.GetDouble("l1_ratio"));
         kwargs.set_fit_intercept(body_v.GetBool("fitIntercept"));
         kwargs.set_max_iter(body_v.GetInteger("max_iter"));
@@ -433,9 +441,9 @@ ElasticNetReply LinearServiceClient::elasticNetResponse(const string &request_ms
 
     ClientContext context;
 
-    AIProto::ElasticNetRequest request;
+    ElasticNetRequest request;
     
-    AIProto::ElasticNetkwargs kwargs;
+    ElasticNetkwargs kwargs;
 
     JsonValue json(request_msg);
 
