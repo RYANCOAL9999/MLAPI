@@ -10,13 +10,13 @@ mvn archetype:generate -DgroupId=com.quotes -DartifactId=quotes -Dversion=1.0-SN
 # Clean Project Package:
 mvn clean package
 
-# Download protoc-gen-grpc-java: 
+# Download Protoc-gen-grpc-java: 
 https://repo1.maven.org/maven2/io/grpc/protoc-gen-grpc-java/1.59.0/
 
-# Auto generated protoc-gen-grpc-java: 
+# Auto Generated Protoc-gen-grpc-java: 
 https://github.com/grpc/grpc-java/issues/7690 with glli commented on Aug 14
 
-# Generated-code reference
+# Generated-code Reference
 https://grpc.io/docs/languages/java/generated-code/
 
 # GRPC Java:
@@ -28,10 +28,10 @@ https://github.com/bazelbuild/bazel
 # Gradle:
 https://github.com/gradle/gradle
 
-#rules_proto_grpc reference:
+#Rules_proto_grpc Reference:
 https://github.com/rules-proto-grpc/rules_proto_grpc/tree/master
 
-# Google Resources reference:
+# Google Resources Reference:
 https://chromium.googlesource.com/infra/goma/server/+/48224f31513604484d7c74afa5fd9d7e621e1691/proto/google
 
 # Stop it on 
