@@ -1,0 +1,6 @@
+name: quotes
+org: ryancoal9999
+description: Deploys a java spring boot API service, backed by DynamoDB, with traditional Serverless Framework
+keywords: aws, serverless, faas, lambda, java, spring boot, dynamodb
+repo: https://github.com/RYANCOAL9999/MLAPI/Python/quotes
+license: MIT

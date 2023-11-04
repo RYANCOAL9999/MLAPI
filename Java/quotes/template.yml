@@ -1,0 +1,31 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: AWS Serverless Spring Boot API - com.quotes::quotes
+Globals:
+  Api:
+    EndpointConfiguration: REGIONAL
+
+Resources:
+  QuotesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.quotes.StreamLambdaHandler::handleRequest
+      Runtime: java11
+      CodeUri: .
+      MemorySize: 512
+      Policies: # Correct the Policies section
+        - AWSLambdaBasicExecutionRole
+      Timeout: 30
+      Events:
+        ProxyResource:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: ANY
+
+Outputs:
+  QuotesApi:
+    Description: URL for application
+    Value: !Sub https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/ping
+    Export:
+      Name: QuotesApi

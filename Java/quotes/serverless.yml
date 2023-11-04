@@ -1,0 +1,22 @@
+service: quotes
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: java11
+  timeout: 10
+
+functions:
+  springBootLambdaFunction:
+    handler: com.quotes.StreamLambdaHandler
+    events:
+      - http:
+          path: /
+          method: ANY
+
+package:
+  artifact: target/aws-java-spring-cloud-function-demo-0.0.1-SNAPSHOT-aws.jar
+
+
+
