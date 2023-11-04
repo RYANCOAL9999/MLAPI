@@ -22,8 +22,17 @@ https://grpc.io/docs/languages/java/generated-code/
 # GRPC Java:
 https://github.com/grpc/grpc-java/tree/master
 
+# Bazel:
+https://github.com/bazelbuild/bazel
+
+# Gradle:
+https://github.com/gradle/gradle
+
 #rules_proto_grpc reference:
 https://github.com/rules-proto-grpc/rules_proto_grpc/tree/master
+
+# Google Resources reference:
+https://chromium.googlesource.com/infra/goma/server/+/48224f31513604484d7c74afa5fd9d7e621e1691/proto/google
 
 # Stop it on 
 src/main/java/com/quotes/controller/PingController.
