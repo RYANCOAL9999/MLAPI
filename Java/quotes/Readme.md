@@ -28,7 +28,7 @@ https://github.com/bazelbuild/bazel
 # Gradle:
 https://github.com/gradle/gradle
 
-#Rules_proto_grpc Reference:
+# Rules_proto_grpc Reference:
 https://github.com/rules-proto-grpc/rules_proto_grpc/tree/master
 
 # Google Resources Reference:
