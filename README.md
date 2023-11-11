@@ -4,6 +4,9 @@ Machine Learning Project with Serverless API
 # Java Is Not Support
 Please see the documentation with Java/quotes/Readme.md
 
+# C# Is Not Support
+Please see the documentation with C#/quotes/Readme.png
+
 # Serverless Reference:
 https://github.com/serverless/examples/tree/v3
 
