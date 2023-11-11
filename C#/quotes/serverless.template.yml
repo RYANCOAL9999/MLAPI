@@ -1,0 +1,6 @@
+name: quotes
+org: ryancoal9999
+description: Deploys a C#, ASP.NET, backed by DynamoDB, with traditional Serverless Framework
+keywords: aws, serverless, faas, lambda, C#, ASP.NET, dynamodb
+repo: https://github.com/RYANCOAL9999/MLAPI/Javascript/quotes
+license: MIT
