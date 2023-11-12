@@ -6,27 +6,27 @@ const {
     headerResponse, 
     infoResponse, 
     describlerResponse 
-} = require("./module/generalService")
+} = require("./model/generalService")
 
 const {
     createSVMStub, 
     linearSVCResponse, 
     linearSVRResponse, 
     svcResponse 
-} = require("./module/svmService")
+} = require("./model/svmService")
 
 const {
     createPolynomialStub, 
     polynomialFeaturesResponse, 
     polynomialFeaturesFitTransformResponse 
-} = require("./module/polynomialService")
+} = require("./model/polynomialService")
 
 const {
     createNeighborsStub, 
     nearestNeighborsResponse, 
     kdTreeResponse, 
     nearestCentroidResponse 
-} = require("./module/neighborsService")
+} = require("./model/neighborsService")
 
 const {
     createLinearStub, 
@@ -39,7 +39,7 @@ const {
     tweedieRegressorResponse,
     sgdClassifierResponse,
     elasticNetResponse 
-} = require("./module/linearService");
+} = require("./model/linearService");
 
 const generalStub = createGeneralStub("localhost:50051");
 
@@ -95,4 +95,4 @@ app.get('/api/elasticNet', (req, res) => elasticNetResponse(req, res, linearStub
   
 app.use((req, res, next) => {return res.status(404).json({error: "Not Found"});});
 
-module.exports.handler = serverless(app);
+model.exports.handler = serverless(app);
